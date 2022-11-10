@@ -1,0 +1,153 @@
+<html>
+<head>
+<title>Visitors</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript">
+		function showform(dowhat) {
+			/*
+			* four DIVS: browse, insert, update, delete
+			* this function sets one visible the others not
+			*/
+			if (dowhat == 'insert'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'block';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'none';
+			}
+			else if (dowhat == 'update'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'block';
+				document.getElementById('delete').style.display = 'none';
+			}
+			else if (dowhat == 'delete'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'block';
+			}
+      else if (dowhat == 'all'){
+				document.getElementById('browse').style.display = 'block';
+				document.getElementById('insert').style.display = 'block';
+				document.getElementById('update').style.display = 'block';
+				document.getElementById('delete').style.display = 'block';
+			}
+			else { //by default display browse
+				document.getElementById('browse').style.display = 'block';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'none';
+			}
+		}
+    function newVisitor() { showform('insert'); }
+    function updateVisitor(pid) { showform('update'); }
+    function deleteVisitor(pid) { showform ('delete'); }
+    function browseVisitors() { showform ('browse'); }
+    function showAll() { showform ('all'); }
+</script>
+</head>
+
+<body onload="browseVisitors()">
+<h1>Visitors</h1>
+
+[ <a href="dinosaurs">Dinosaurs</a> | <a href="species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+
+<div id="browse">
+<p><a href="#" onClick="showAll()">Display all forms</a> </p>
+<table border="1" cellpadding="5">
+  <tr>
+    <th><a href="#" onClick="newVisitor()">New</a></th>
+    <th></th>
+    <th>ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Health Status</th>
+    <th>Location</th>
+  </tr>
+  <tr>
+    <td><a href="#" onClick="updateVisitor('this.visitorID')">Edit</a></td>
+    <td><a href="#" onclick="deleteVisitor('this.visitorID')">Delete</a></td>
+    <td align="right" >1</td>
+    <td >Laura</td>
+    <td align="right" >Hardy</td>
+    <td>Healthy</td>
+    <td>Hotel</td>
+  </tr>
+  <tr>
+    <td><a href="#" onClick="updateVisitor('this.visitorID')">Edit</a></td>
+    <td><a href="#" onclick="deleteVisitor('this.visitorID')">Delete</a></td>
+    <td align="right" >2</td>
+    <td>Lee</td>
+    <td align="right" >Nobody</td>
+    <td>dead</td>
+    <td >Enclosure</td>
+  </tr>
+  <tr>
+    <td><a href="#" onClick="updateVisitor('this.visitorID')">Edit</a></td>
+    <td><a href="#" onclick="deleteVisitor('this.visitorID')">Delete</a></td>
+    <td>3</td>
+    <td>Ian</td>
+    <td align="right" >Malcolm</td>
+    <td>injured</td>
+    <td>Med Bay</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</div> <!-- browse -->
+<div id="insert">
+    <form method="POST" id="addVisitor">
+        <legend><strong>Add Visitor</strong></legend>
+          <fieldset class="fields">
+            <label> Name </label> <input type="text" name="name">
+            <label> Health Status </label> <input type="text" name="health status" value="Healthy">
+            <label> Location </label> 
+              <select name="location">
+                <option value="0">&nbsp;</option>
+                <option value="1" selected>Visitor Center</option>
+                <option value="2">Security Building</option>
+                <option value="3">Velociraptor Enclosure</option>
+              </select>
+      </fieldset>
+          <input class="btn" type="submit" id="addVisitor" value="Add Visitor">
+          <input class="btn" type="button" value="cancel" onClick="browseVisitor()">
+	</form> 
+</div><!-- insert -->
+<p>&nbsp;</p>
+<div id="update">
+    <form method="POST" id="UpdateVisitor">
+        <legend><strong>Update Visitor</strong></legend>
+          <fieldset class="fields">
+          <input type="hidden" name="visitorID" id="updatevisitorID" value="1">
+          <label> ID: </label> 1
+            <label> Name </label> <input type="text" name="name" value="William">
+            <label> Health Status </label> <input type="text" name="health status" value="Healthy">
+            <label> Location </label> 
+              <select name="location">
+                <option value="0">&nbsp;</option>
+                <option value="1" selected>Visitor Center</option>
+                <option value="2">Security Building</option>
+                <option value="3">Velociraptor Enclosure</option>
+              </select>
+      </fieldset>
+          <input class="btn" type="submit" id="UpdateSaveVisitor" value="Save Update Visitor">
+          <input class="btn" type="button" value="cancel" onClick="browseVisitors()">
+	</form> 
+</div><!-- update -->
+<p>&nbsp;</p>
+<div id="delete" style="display: block">
+  <form method="POST" id="deleteVisitors">
+      <legend><strong>Delete Visitor</strong></legend>
+          <fieldset class="fields">
+          <p>Are you sure you wish to delete the following visitor?</p>
+          <input type="hidden" name="visitorID" id="deletevisitorID" value="1">
+          <label><strong>ID:</strong></label> 1
+            <label> <strong>Name</strong> </label> Laura Hardy
+            
+    </fieldset>
+    <input class="btn" type="submit" id="DeleteVisitor" value="Delete Visitor">
+          <input class="btn" type="button" value="cancel" onClick="browseVisitor()">
+  </form> 
+</div><!-- delete -->
+
+</body>
+</html>
