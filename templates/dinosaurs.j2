@@ -58,7 +58,6 @@
 </head>
 
 <body onload="browseDinosaurs()">
-	<h1>Dinosaur</h1> [ Planets | <a href="people">People</a> | Certifications | People Certified ]
 	<div id="browse">
 		<p><a href="#" onClick="newDinosaur()">Add New</a> </p>
 		<table border="1" cellpadding="5">
@@ -87,8 +86,8 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    <td><a href="edit_people/{{item.id}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_people/{{item.id}}" class="btn btn-default">Delete</a></td>
+						    <td><a href="edit_dinosaur/{{item.id}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_dinosaur/{{item.id}}" class="btn btn-default">Delete</a></td>
 
 					    </tr> 
                         {% endfor %} 
@@ -99,7 +98,7 @@
 
 	<div id="insert">
 		<!-- form to INSERT new data into Dinosaurs-->
-		<form id="insertDinosaur" action="/dinosaurs" method="post">
+		<form id="insertDinosaur" action="/insert_dinosaur" method="post">
 			<legend><strong>Add Dinosaur</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
@@ -122,14 +121,14 @@
 				<input type="text" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}" placeholder=""> 
             </fieldset>
 
-            <!-- Create 'Add Person' and 'Cancel' buttons -->
-			<input type="submit" value="Add Person" name="Add_Person" class="btn btn-primary" style="margin:.5rem;">
-			<input class="btn" type="button" value="Cancel" onClick="browsePeople()"> 
+            <!-- Create 'Add Dinosaur' and 'Cancel' buttons -->
+			<input type="submit" value="Add Dinosaur" name="Add_Dinosaur" class="btn btn-primary" style="margin:.5rem;">
+			<input class="btn" type="button" value="Cancel" onClick="browseDinosaurs()"> 
         </form>
 	</div><!--insert-->
 	<div id="edit">
 		<!-- form to edit data in Dinosaurs-->
-		<form id="editPerson" action="/edit_people/{{data[0].id}}" method="post">
+		<form id="editDinosaur" action="/edit_dinosaur/{{data[0].id}}" method="post">
 			<legend><strong>Edit Dinosaur</strong></legend>
 			<fieldset>
 				<input type="hidden" value="{{data[0].id}}" class="form-control" id="personID" name="personID" required>
@@ -154,5 +153,18 @@
 				<input class="btn" type="button" value="Cancel" onClick="browsePeople()" style="margin:.5rem;"> 
         </form>
 	</div><!--edit-->
+    <div id="delete" style="display: block">
+        <form method="POST" id="deleteLocations">
+            <legend><strong>Delete Location</strong></legend>
+            <fieldset class="fields">
+                <p>Are you sure you wish to delete the following?</p>
+                <input type="hidden" name="locationID" id="deletelocationID" value="1">
+                <label><strong>ID:</strong></label> 1
+                <label> <strong>Name</strong> </label> Enclosure
+            </fieldset>
+            <input class="btn" type="submit" id="DeleteDinosaur" value="Delete Dinosaur">
+            <input class="btn" type="button" value="cancel" onClick="browseLocation()">
+        </form> 
+    </div><!-- delete -->
 </body>
 </html>

@@ -1,14 +1,23 @@
 from flask import Flask, render_template, json
 from flask_mysqldb import MySQL
 from flask import request
+from dotenv import load_dotenv, find_dotenv
 import os
 import database.db_connector as db
 
 # Configuration
-
 app = Flask(__name__)
-# do we need this one? \/\/?
-db_connection = db.connect_to_database()
+
+# Load our environment variables from the .env file in the root of our project.
+load_dotenv(find_dotenv())
+
+# database connection info
+app.config["MYSQL_HOST"] = os.environ.get("340DBHOST")
+app.config["MYSQL_USER"] = os.environ.get("340DBUSER")
+app.config["MYSQL_PASSWORD"] = os.environ.get("340DBPW")
+app.config["MYSQL_DB"] = os.environ.get("340DB")
+app.config["MYSQL_CURSORCLASS"] = "DictCursor"
+
 mysql = MySQL(app)
 
 # Routes 
@@ -22,10 +31,9 @@ def dinosaurs():
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the people in bsg_people
-        query = "SELECT Dinosaurs.id, Dinosaurs.name, Species.species_name, Locations.location_name, Dinosaurs.health_status FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id"
-        # cur = mysql.connection.cursor()
-        # cur.execute(query)
-        cur = db.execute_query(db_connection=db_connection, query=query)
+        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status' FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
         data = cur.fetchall()
 
         # mySQL query to grab planet id/name data for our dropdown
@@ -47,11 +55,11 @@ def species():
     # object called a cursor. Think of it as the object that acts as the
     # person typing commands directly into the MySQL command line and
     # reading them back to you when it gets results
-    cursor = db.execute_query(db_connection=db_connection, query=query)
-
+    cur = mysql.connection.cursor()
+    cur.execute(query)
     # The cursor.fetchall() function tells the cursor object to return all
     # the results from the previously executed
-    results = cursor.fetchall()
+    results = cur.fetchall()
 
     # Sends the results back to the web browser.
     # return results
@@ -67,11 +75,11 @@ def dinosaurAssignments():
     # object called a cursor. Think of it as the object that acts as the
     # person typing commands directly into the MySQL command line and
     # reading them back to you when it gets results
-    cursor = db.execute_query(db_connection=db_connection, query=query)
-
+    cur = mysql.connection.cursor()
+    cur.execute(query)
     # The cursor.fetchall() function tells the cursor object to return all
     # the results from the previously executed
-    results = cursor.fetchall()
+    results = cur.fetchall()
 
     # Sends the results back to the web browser.
     # return results
@@ -86,11 +94,11 @@ def employees():
     # object called a cursor. Think of it as the object that acts as the
     # person typing commands directly into the MySQL command line and
     # reading them back to you when it gets results
-    cursor = db.execute_query(db_connection=db_connection, query=query)
-
+    cur = mysql.connection.cursor()
+    cur.execute(query)
     # The cursor.fetchall() function tells the cursor object to return all
     # the results from the previously executed
-    results = cursor.fetchall()
+    results = cur.fetchall()
 
     # Sends the results back to the web browser.
     # return results
@@ -106,11 +114,11 @@ def locations():
     # object called a cursor. Think of it as the object that acts as the
     # person typing commands directly into the MySQL command line and
     # reading them back to you when it gets results
-    cursor = db.execute_query(db_connection=db_connection, query=query)
-
+    cur = mysql.connection.cursor()
+    cur.execute(query)
     # The cursor.fetchall() function tells the cursor object to return all
     # the results from the previously executed
-    results = cursor.fetchall()
+    results = cur.fetchall()
 
     # Sends the results back to the web browser.
     # return results
@@ -126,11 +134,11 @@ def visitors():
     # object called a cursor. Think of it as the object that acts as the
     # person typing commands directly into the MySQL command line and
     # reading them back to you when it gets results
-    cursor = db.execute_query(db_connection=db_connection, query=query)
-
+    cur = mysql.connection.cursor()
+    cur.execute(query)
     # The cursor.fetchall() function tells the cursor object to return all
     # the results from the previously executed
-    results = cursor.fetchall()
+    results = cur.fetchall()
 
     # Sends the results back to the web browser.
     # return results
