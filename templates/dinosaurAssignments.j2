@@ -1,0 +1,154 @@
+<html>
+<head>
+<title>Dinosaur Assignments</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript">
+		function showform(dowhat) {
+			/*
+			* four DIVS: browse, insert, update, delete
+			* this function sets one visible the others not
+			*/
+			if (dowhat == 'insert'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'block';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'none';
+			}
+			else if (dowhat == 'update'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'block';
+				document.getElementById('delete').style.display = 'none';
+			}
+			else if (dowhat == 'delete'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'block';
+			}
+      else if (dowhat == 'all'){
+				document.getElementById('browse').style.display = 'block';
+				document.getElementById('insert').style.display = 'block';
+				document.getElementById('update').style.display = 'block';
+				document.getElementById('delete').style.display = 'block';
+			}
+			else { //by default display browse
+				document.getElementById('browse').style.display = 'block';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'none';
+			}
+		}
+    function newDinosaurAssignment() { showform('insert'); }
+    function updateDinosaurAssignment(pid) { showform('update'); }
+    function deleteDinosaurAssignment(pid) { showform ('delete'); }
+    function browseDinosaurAssignments() { showform ('browse'); }
+    function showAll() { showform ('all'); }
+</script>
+</head>
+
+<body onload="browseDinosaurAssignments()">
+<h1>Dinosaur Assignments</h1>
+
+[ <a href="dinosaurs">Dinosaurs</a> | <a href="species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+
+<div id="browse">
+<p><a href="#" onClick="showAll()">Display all forms</a> </p>
+<table border="1" cellpadding="5">
+  <tr>
+    <th><a href="#" onClick="newDinosaurAssignment()">New</a></th>
+    <th></th>
+    <th>ID</th>
+    <th>Dinosaur</th>
+    <th>Employee Assigned</th>
+    <th>Assignment</th>
+  </tr>
+  <tr>
+    <td><a href="#" onClick="updateDinosaurAssignment('this.DinosaurAssignmentID')">Edit</a></td>
+    <td><a href="#" onclick="deleteDinosaurAssignment('this.DinosaurAssignmentID')">Delete</a></td>
+    <td align="right" >1</td>
+    <td >Lee</td>
+    <td align="right" >Lee Taylor</td>
+    <td>Performing medical analysis.</td>
+    
+  </tr>
+  <tr>
+    <td><a href="#" onClick="updateDinosaurAssignment('this.DinosaurAssignmentID')">Edit</a></td>
+    <td><a href="#" onclick="deleteDinosaurAssignment('this.DinosaurAssignmentID')">Delete</a></td>
+    <td align="right" >2</td>
+    <td >Rosko</td>
+    <td align="right" >William Heggerdon</td>
+    <td>Transporting injured dinosaur to med bay.</td>
+    
+  </tr>
+  <tr>
+    <td><a href="#" onClick="updateDinosaurAssignment('this.DinosaurAssignmentID')">Edit</a></td>
+    <td><a href="#" onclick="deleteDinosaurAssignment('this.DinosaurAssignmentID')">Delete</a></td>
+    <td align="right" >3</td>
+    <td >Rosko</td>
+    <td align="right" >Jack Harkness</td>
+    <td>Transporting injured dinosaur to med bay.</td>
+    
+  </tr>
+
+  <tr>
+    <td><a href="#" onClick="updateDinosaurAssignment('this.DinosaurAssignmentID')">Edit</a></td>
+    <td><a href="#" onclick="deleteDinosaurAssignment('this.DinosaurAssignmentID')">Delete</a></td>
+    <td align="right" >4</td>
+    <td >Betsy</td>
+    <td align="right" >Lee Taylor</td>
+    <td>Treating for bacterial infection.</td>
+    
+  </tr>
+  
+</table>
+<p>&nbsp;</p>
+</div> <!-- browse -->
+<div id="insert">
+    <form method="POST" id="addDinosaurAssignment">
+        <legend><strong>Add Dinosaur Assignment</strong></legend>
+          <fieldset class="fields">
+            <label> Dinosaur Name </label> <input type="text" name="name">
+            <label> Employee Name </label> <input type="text" name="name">
+            <label> Assignment </label> <input type="text" name="name">
+            
+            
+      </fieldset>
+          <input class="btn" type="submit" id="addDinosaurAssignment" value="Add DinosaurAssignment">
+          <input class="btn" type="button" value="cancel" onClick="browseDinosaurAssignment()">
+	</form> 
+</div><!-- insert -->
+<p>&nbsp;</p>
+<div id="update">
+    <form method="POST" id="UpdateDinosaurAssignment">
+        <legend><strong>Update Dinosaur Assignment</strong></legend>
+          <fieldset class="fields">
+          <input type="hidden" name="DinosaurAssignmentID" id="updateDinosaurAssignmentID" value="1">
+          <label> ID: </label> 1
+          <label> Dinosaur Name </label> <input type="text" name="name">
+          <label> Employee Name </label> <input type="text" name="name">
+          <label> Assignment </label> <input type="text" name="name">
+                
+      </fieldset>
+          <input class="btn" type="submit" id="UpdateSaveDinosaurAssignment" value="Save Update DinosaurAssignment">
+          <input class="btn" type="button" value="cancel" onClick="browseDinosaurAssignments()">
+	</form> 
+</div><!-- update -->
+<p>&nbsp;</p>
+<div id="delete" style="display: block">
+  <form method="POST" id="deleteDinosaurAssignments">
+      <legend><strong>Delete Dinosaur Assignment</strong></legend>
+          <fieldset class="fields">
+          <p>Are you sure you wish to delete the following?</p>
+          <input type="hidden" name="DinosaurAssignmentID" id="deleteDinosaurAssignmentID" value="1">
+          <label><strong>ID:</strong></label> 1
+            <label> <strong>Lee -> Lee Taylor</strong> </label> 
+            
+    </fieldset>
+    <input class="btn" type="submit" id="DeleteDinosaurAssignment" value="Delete DinosaurAssignment">
+          <input class="btn" type="button" value="cancel" onClick="browseDinosaurAssignment()">
+  </form> 
+</div><!-- delete -->
+
+</body>
+</html>
