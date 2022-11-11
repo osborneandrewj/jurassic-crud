@@ -24,7 +24,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def root():
-    return render_template("main.j2")
+    return redirect("/dinosaurs")
 
 @app.route('/dinosaurs', methods=["POST", "GET"])
 def dinosaurs():
