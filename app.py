@@ -1,3 +1,5 @@
+# Adapted from the excellent starter project at https://github.com/osu-cs340-ecampus/flask-starter-app
+
 from flask import Flask, render_template, json, redirect
 from flask_mysqldb import MySQL
 from flask import request
@@ -97,7 +99,6 @@ def delete_dinosaur(id):
 
 
     if request.method == "POST":
-        # mySQL query to delete the person with our passed id
         query = "DELETE FROM Dinosaurs WHERE Dinosaurs.id = '%s';"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
@@ -108,106 +109,50 @@ def delete_dinosaur(id):
 
 @app.route('/species')
 def species():
-    # Write the query and save it to a variable
-    query = "SELECT * FROM Species;"
 
-    # The way the interface between MySQL and Flask works is by using an
-    # object called a cursor. Think of it as the object that acts as the
-    # person typing commands directly into the MySQL command line and
-    # reading them back to you when it gets results
+    query = "SELECT * FROM Species;"
     cur = mysql.connection.cursor()
     cur.execute(query)
-    # The cursor.fetchall() function tells the cursor object to return all
-    # the results from the previously executed
     results = cur.fetchall()
-
-    # Sends the results back to the web browser.
-    # return results
     return render_template("species.j2", Species=results)
 
 
 @app.route('/dinosaurAssignments')
 def dinosaurAssignments():
-    # Write the query and save it to a variable
     query = "SELECT * FROM Employees_To_Dinosaurs;"
-
-    # The way the interface between MySQL and Flask works is by using an
-    # object called a cursor. Think of it as the object that acts as the
-    # person typing commands directly into the MySQL command line and
-    # reading them back to you when it gets results
     cur = mysql.connection.cursor()
     cur.execute(query)
-    # The cursor.fetchall() function tells the cursor object to return all
-    # the results from the previously executed
     results = cur.fetchall()
-
-    # Sends the results back to the web browser.
-    # return results
     return render_template("dinosaurAssignments.j2", dinosaurAssignments=results)
 
 @app.route('/employees')
 def employees():
-    # Write the query and save it to a variable
     query = "SELECT * FROM Employees;"
-
-    # The way the interface between MySQL and Flask works is by using an
-    # object called a cursor. Think of it as the object that acts as the
-    # person typing commands directly into the MySQL command line and
-    # reading them back to you when it gets results
     cur = mysql.connection.cursor()
     cur.execute(query)
-    # The cursor.fetchall() function tells the cursor object to return all
-    # the results from the previously executed
     results = cur.fetchall()
-
-    # Sends the results back to the web browser.
-    # return results
     return render_template("employees.j2", Species=results)
 
 
 @app.route('/locations')
 def locations():
-    # Write the query and save it to a variable
     query = "SELECT * FROM Locations;"
-
-    # The way the interface between MySQL and Flask works is by using an
-    # object called a cursor. Think of it as the object that acts as the
-    # person typing commands directly into the MySQL command line and
-    # reading them back to you when it gets results
     cur = mysql.connection.cursor()
     cur.execute(query)
-    # The cursor.fetchall() function tells the cursor object to return all
-    # the results from the previously executed
     results = cur.fetchall()
-
-    # Sends the results back to the web browser.
-    # return results
     return render_template("locations.j2", Locations=results)
 
 
 @app.route('/visitors')
 def visitors():
-    # Write the query and save it to a variable
     query = "SELECT * FROM Visitors;"
-
-    # The way the interface between MySQL and Flask works is by using an
-    # object called a cursor. Think of it as the object that acts as the
-    # person typing commands directly into the MySQL command line and
-    # reading them back to you when it gets results
     cur = mysql.connection.cursor()
     cur.execute(query)
-    # The cursor.fetchall() function tells the cursor object to return all
-    # the results from the previously executed
     results = cur.fetchall()
-
-    # Sends the results back to the web browser.
-    # return results
     return render_template("visitors.j2", Visitors=results)
 # Listener
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 1857)) 
-    #                                 ^^^^
-    #              You can replace this number with any valid port
     
     app.run(port=port, debug=True) 
