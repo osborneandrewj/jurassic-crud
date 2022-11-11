@@ -83,6 +83,63 @@ def dinosaurs():
         # redirect back to Dinosaurs page
         return redirect("/dinosaurs")
 
+@app.route('/update_dinosaur/<int:id>', methods=["POST", "GET"])
+def update_dinosaur(id):
+    # Grab Dinosaurs data so we send it to our template to display
+    if request.method == "GET":
+        # mySQL query to grab all the people in bsg_people
+        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status' FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (id,))
+        data = cur.fetchall()
+
+        # mySQL query to grab data for dropdowns
+        location_query = "SELECT location_name from Locations;"
+        cur = mysql.connection.cursor()
+        cur.execute(location_query)
+        loc_data = cur.fetchall()
+
+        # mySQL query to grab data for dropdowns
+        species_query = "SELECT species_name from Species;"
+        cur = mysql.connection.cursor()
+        cur.execute(species_query)
+        spec_data = cur.fetchall()
+
+        # render edit_people page passing our query data and homeworld data to the edit_people template
+        return render_template("update_dinosaur.j2", data=data, locations=loc_data, 
+        spec_data=spec_data)
+
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("Update_Dinosaur"):
+            # grab user form inputs
+            species = request.form["species"]
+            location = request.form["location"]
+            name = request.form["name"]
+            status = request.form["status"]
+
+        # TODO: account for null species
+            if species == "":
+                query = ""
+                cur = mysql.connection.cursor()
+                cur.execute(query, (species, location, name, status))
+                mysql.connection.commit()
+
+        # no null inputs
+            else:
+                query = "UPDATE Dinosaurs\
+                    SET species_id = (SELECT id FROM Species WHERE species_name=%s),\
+                        location_id = (SELECT id FROM Locations WHERE location_name= %s),\
+                        name = %s,\
+                        health_status = %s\
+                    WHERE id = %s;"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (species, location, name, status, id))
+                mysql.connection.commit()
+
+        # redirect back to Dinosaurs page
+        return redirect("/dinosaurs")
+
 # route for delete functionality, deleting a dinosaur from Dinosaurs,
 # we want to pass the 'id' value of that dinosaur on button click 
 @app.route("/delete_dinosaur/<int:id>", methods=["POST", "GET"])
