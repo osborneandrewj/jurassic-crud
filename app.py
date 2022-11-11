@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json
+from flask import Flask, render_template, json, redirect
 from flask_mysqldb import MySQL
 from flask import request
 from dotenv import load_dotenv, find_dotenv
@@ -36,15 +36,50 @@ def dinosaurs():
         cur.execute(query)
         data = cur.fetchall()
 
-        # mySQL query to grab planet id/name data for our dropdown
-        # query2 = "SELECT id, name FROM bsg_planets"
-        # cur = mysql.connection.cursor()
-        # cur.execute(query2)
-        # homeworld_data = cur.fetchall()
+        # mySQL query to grab data for dropdowns
+        location_query = "SELECT location_name from Locations;"
+        cur = mysql.connection.cursor()
+        cur.execute(location_query)
+        loc_data = cur.fetchall()
+
+        # mySQL query to grab data for dropdowns
+        species_query = "SELECT species_name from Species;"
+        cur = mysql.connection.cursor()
+        cur.execute(species_query)
+        spec_data = cur.fetchall()
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("dinosaurs.j2", data=data)
+        return render_template("dinosaurs.j2", data=data, locations=loc_data, 
+        spec_data=spec_data)
 
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("Add_Dinosaur"):
+            # grab user form inputs
+            species = request.form["species"]
+            location = request.form["location"]
+            name = request.form["name"]
+            status = request.form["status"]
+
+        # account for null species
+            if species == "":
+                query = ""
+                cur = mysql.connection.cursor()
+                cur.execute(query, (species, location, name, status))
+                mysql.connection.commit()
+
+        # no null inputs
+            else:
+                query = "INSERT INTO Dinosaurs(species_id, location_id, name, health_status)\
+                    VALUES((SELECT id FROM Species WHERE species_name= %s),\
+                    (SELECT id FROM Locations WHERE location_name= %s), %s,\
+                    %s);"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (species, location, name, status))
+                mysql.connection.commit()
+
+        # redirect back to Dinosaurs page
+        return redirect("/dinosaurs")
 
 @app.route('/species')
 def species():
