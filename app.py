@@ -61,7 +61,7 @@ def dinosaurs():
             name = request.form["name"]
             status = request.form["status"]
 
-        # account for null species
+        # TODO: account for null species
             if species == "":
                 query = ""
                 cur = mysql.connection.cursor()
@@ -80,6 +80,31 @@ def dinosaurs():
 
         # redirect back to Dinosaurs page
         return redirect("/dinosaurs")
+
+# route for delete functionality, deleting a dinosaur from Dinosaurs,
+# we want to pass the 'id' value of that dinosaur on button click 
+@app.route("/delete_dinosaur/<int:id>", methods=["POST", "GET"])
+def delete_dinosaur(id):
+
+    if request.method == "GET":
+        # mysql query to gather the form's data
+        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status' FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (id,))
+        data = cur.fetchall()
+
+        return render_template("delete_dinosaur.j2", data=data)
+
+
+    if request.method == "POST":
+        # mySQL query to delete the person with our passed id
+        query = "DELETE FROM Dinosaurs WHERE Dinosaurs.id = '%s';"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (id,))
+        mysql.connection.commit()
+
+    # redirect back to dinosaur page
+    return redirect("/dinosaurs")
 
 @app.route('/species')
 def species():

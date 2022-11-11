@@ -1,8 +1,8 @@
+<html>
+<!-- Adapted from the people.html UI design -->
 <h1> Dinosaurs </h1>
  [ <a href="dinosaurs">Dinosaurs</a> | <a href="species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
 
-<html>
-<!-- Adapted from the people.html UI design -->
 <head>
 	<title>Dinosuars</title>
 	<link href="style.css" rel="stylesheet" type="text/css" />
@@ -76,7 +76,8 @@
                     </tr>
 
 				<tbody>
-					<!-- Now, iterate through every item in data -->{% for item in data %}
+					<!-- Now, iterate through every item in data -->
+                    {% for item in data %}
 					    <tr>
 						    <!-- Then iterate through every key in the current item dictionary -->
                             {% for key in item.keys() %}
@@ -86,8 +87,8 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    <td><a href="edit_dinosaur/{{item.id}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_dinosaur/{{item.id}}" class="btn btn-default">Delete</a></td>
+                            <td><a href="edit_dinosaur/{{item.id}}" class="btn btn-default">Edit</a></td>
+                            <td><a href="delete_dinosaur/{{item.ID}}" class="btn btn-default">Delete</a></td>
 
 					    </tr> 
                         {% endfor %} 
@@ -125,7 +126,7 @@
               </select>
       </fieldset>
           <input class="btn btn-primary" type="submit" id="Add_Dinosaur" name="Add_Dinosaur" value="Add Dinosaur">
-          <input class="btn" type="button" value="cancel" onClick="browseDinosaur()">
+          <input class="btn" type="button" value="cancel" onClick="browseDinosaurs()">
 	</form> 
 </div><!-- insert -->
 	<div id="edit">
@@ -156,16 +157,16 @@
         </form>
 	</div><!--edit-->
     <div id="delete" style="display: block">
-        <form method="POST" id="deleteLocations">
-            <legend><strong>Delete Location</strong></legend>
+        <form id="deleteDinosaur" action="/delete_dinosaur/{{data[0].ID}}" method="POST">
+            <legend><strong>Delete Dinosaur</strong></legend>
             <fieldset class="fields">
                 <p>Are you sure you wish to delete the following?</p>
-                <input type="hidden" name="locationID" id="deletelocationID" value="1">
-                <label><strong>ID:</strong></label> 1
+                <input type="hidden" name="locationID" id="deletelocationID" value="{{data[0].ID}}">
+                <label><strong>ID:</strong></label> 
                 <label> <strong>Name</strong> </label> Enclosure
             </fieldset>
             <input class="btn" type="submit" id="DeleteDinosaur" value="Delete Dinosaur">
-            <input class="btn" type="button" value="cancel" onClick="browseLocation()">
+            <input class="btn" type="button" value="cancel" onClick="browseDinosaurs()">
         </form> 
     </div><!-- delete -->
 </body>
