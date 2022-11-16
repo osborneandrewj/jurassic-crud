@@ -87,13 +87,13 @@ def dinosaurs():
 def update_dinosaur(id):
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
-        # mySQL query to grab all the people in bsg_people
+        # mySQL query to grab all the dinosaurs
         query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status' FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
 
-        # mySQL query to grab data for dropdowns
+        # mySQL query to grab data for the location dropdown
         location_query = "SELECT location_name from Locations;"
         cur = mysql.connection.cursor()
         cur.execute(location_query)
@@ -147,7 +147,10 @@ def delete_dinosaur(id):
 
     if request.method == "GET":
         # mysql query to gather the form's data
-        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status' FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
+        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status'\
+        FROM Dinosaurs\
+            INNER JOIN Species ON Dinosaurs.species_id = Species.id\
+            INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()

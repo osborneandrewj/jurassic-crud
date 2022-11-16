@@ -43,7 +43,7 @@
     <form id="updateDinosaur" action="/update_dinosaur/{{data[0].ID}}" method="post">
         <legend><strong>Update Dinosaur</strong></legend>
           <fieldset class="fields">
-            <label> Name </label> <input type="text" id="name" name="name" placeholder="{{data[0].Name}}" required>
+            <label> Name </label> <input type="text" id="name" name="name" value="{{data[0].Name}}" required>
             <label> Species </label> 
               <select name="species">
                 <option value="{{data[0].Species}}">{{data[0].Species}}</option>
