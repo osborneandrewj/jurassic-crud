@@ -22,6 +22,10 @@ app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 mysql = MySQL(app)
 
+# Data used to pre-populate dropdown menus
+
+status_options = ["healthy", "sick", "injured"]
+
 # Routes 
 
 @app.route('/')
@@ -87,27 +91,35 @@ def dinosaurs():
 def update_dinosaur(id):
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
-        # mySQL query to grab all the dinosaurs
-        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status' FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
+        # mySQL query to grab a specific dinosaur that the user selected
+        query = "SELECT Dinosaurs.id AS 'ID',\
+            Dinosaurs.name AS 'Name',\
+            Species.species_name AS 'Species',\
+            Locations.location_name AS 'Location',\
+            Dinosaurs.health_status AS 'Status'\
+            FROM Dinosaurs\
+                INNER JOIN Species ON Dinosaurs.species_id = Species.id\
+                INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
 
-        # mySQL query to grab data for the location dropdown
+        # mySQL query to grab data for the location dropdown menu
         location_query = "SELECT location_name from Locations;"
         cur = mysql.connection.cursor()
         cur.execute(location_query)
         loc_data = cur.fetchall()
 
-        # mySQL query to grab data for dropdowns
+        # mySQL query to grab data for the species dropdown menu
         species_query = "SELECT species_name from Species;"
         cur = mysql.connection.cursor()
         cur.execute(species_query)
         spec_data = cur.fetchall()
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("update_dinosaur.j2", data=data, locations=loc_data, 
-        spec_data=spec_data)
+        return render_template("update_dinosaur.j2", 
+            data=data, locations=loc_data, 
+            spec_data=spec_data, status_options=status_options)
 
     if request.method == "POST":
         # fire off if user presses the Add Person button

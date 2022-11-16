@@ -47,23 +47,23 @@
             <label> Species </label> 
               <select name="species">
                 <option value="{{data[0].Species}}">{{data[0].Species}}</option>
-                {% for x in spec_data %}
-                    <option value="{{x.species_name}}">{{x.species_name}}</option>
+                {% for x in spec_data if x.species_name not in data[0].Species %}
+                  <option value="{{ x.species_name }}">{{ x.species_name }}</option>
                 {% endfor %}
               </select>
             <label> Location </label> 
               <select name="location">
             	<option value="{{data[0].Location}}">{{data[0].Location}}</option>
-                {% for x in locations %}
+                {% for x in locations if x.location_name not in data[0].Location %}
                     <option value="{{x.location_name}}">{{x.location_name}}</option>
                 {% endfor %}
               </select>
 	          <label> Health Status </label> 
               <select name="status">
                 <option value="{{data[0].Status}}">{{data[0].Status}}</option>
-                <option value="healthy">Healthy</option>
-                <option value="sick">Sick</option>
-                <option value="injured">Injured</option>
+                {% for x in status_options if x not in data[0].Status %}
+                  <option value="{{ x }}">{{ x }}</option>
+                {% endfor %}
               </select>
       </fieldset>
       <input class="btn btn-primary" type="submit" id="Update_Dinosaur" name="Update_Dinosaur" value="Update Dinosaur">
