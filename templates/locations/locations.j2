@@ -65,6 +65,8 @@
                   <!-- Create a <th> tag with the key inside of it, this will be our header row -->
                   <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
                 {% endfor %} 
+                  <th scope="col" data-field="Permitted Species" data-filter-control="input">Permitted Species</th>
+
             </tr>
 
           <tbody>
@@ -76,6 +78,13 @@
                   <!-- Create a <td> element with the value of that key in it -->
                   <td> {{item[key]}} </td> 
                 {% endfor %}
+                  <td>
+                    <ul>
+                      {% for x in permitted_species if x.id == item.ID%}
+                          <li>{{x.species_name}}</li>
+                      {% endfor %}
+                    </ul>
+                  </td>
                 <!-- Create our edit/delete buttons -->
                 <td><a href="update_location/{{item.ID}}" class="btn btn-default">Edit</a></td>
                 <td><a href="delete_location/{{item.ID}}" class="btn btn-default">Delete</a></td>
@@ -87,104 +96,37 @@
   </div>	<!-- browse -->
 
 <div id="insert">
-    <form method="POST" id="addLocation">
+    <!-- form to create a new Location-->
+    <form id="insertLocation" action="/locations" method="post">
         <legend><strong>Add Location</strong></legend>
           <fieldset class="fields">
-            <label> Name </label> <input type="text" name="name">
-            <label> Electric Grid Status </label> 
-              <select name="location">
-                <option value="0">&nbsp;</option>
-                <option value="1" selected>Online</option>
-                <option value="2">Reserve</option>
-                <option value="3">Offline</option>
+            <label> Name </label> <input type="text" id="name" name="name" placeholder="Location Name" required>
+            <label> Eletrical </label> 
+              <select name="electrical">
+                {% for x in electric_status_options %}
+                    <option value="{{ x }}">{{ x }}</option>
+                {% endfor %}
               </select>
-            <label> Security Status </label> 
-              <select name="location">
-            	  <option value="0">&nbsp;</option>
-                <option value="1" selected>Online</option>
-                <option value="2">Locked Down</option>
-                <option value="3">Offline</option>
+            <label> Security </label> 
+              <select name="security">
+                {% for x in security_status_options %}
+                    <option value="{{ x }}">{{ x }}</option>
+                {% endfor %}
               </select>
 
-            <div>
-              <label> Permitted Species </label> 
-              <div>
-                <input type="checkbox" id="Tyrannosaurus" name="Tyrannosaurus" checked>
-                <label for="Tyrannosaurus">Tyrannosaurus</label>
-              </div>
-        
-              <div>
-                <input type="checkbox" id="Velociraptor" name="Velociraptor">
-                <label for="Velociraptor">Velociraptor</label>
-              </div>
-              <div>
-                <input type="checkbox" id="Brachiosaurus" name="Brachiosaurus">
-                <label for="Brachiosaurus">Brachiosaurus</label>
-              </div>
-            </div>
-            
-      </fieldset>
-          <input class="btn" type="submit" id="addLocation" value="Add Location">
-          <input class="btn" type="button" value="cancel" onClick="browseLocation()">
-	</form> 
-</div><!-- insert -->
-<p>&nbsp;</p>
-<div id="update">
-    <form method="POST" id="UpdateLocation">
-        <legend><strong>Update Location</strong></legend>
-          <fieldset class="fields">
-          <input type="hidden" name="locationeID" id="updatelocationID" value="1">
-          <label> ID: </label> 1
-            <label> Name </label> <input type="text" name="name" value="Med Bay">
-            <label> Electric Grid Status </label> <select name="location">
-            	<option value="0">&nbsp;</option>
-                <option value="1" selected>Online</option>
-                <option value="2">Reserve</option>
-                <option value="3">Offline</option>
-                </select>
-            <label> Security Status </label> <select name="location">
-            	<option value="0">&nbsp;</option>
-                <option value="1" selected>Online</option>
-                <option value="2">Locked Down</option>
-                <option value="3">Offline</option>
-                </select>
-                
-                <div>
-                  <label> Permitted Species </label> 
-                  <div>
-                    <input type="checkbox" id="Tyrannosaurus" name="Tyrannosaurus" >
-                    <label for="Tyrannosaurus">Tyrannosaurus</label>
-                  </div>
-            
-                  <div>
-                    <input type="checkbox" id="Velociraptor" name="Velociraptor">
-                    <label for="Velociraptor">Velociraptor</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" id="Brachiosaurus" name="Brachiosaurus" checked>
-                    <label for="Brachiosaurus">Brachiosaurus</label>
-                  </div>
-                </div>
-      </fieldset>
-          <input class="btn" type="submit" id="UpdateSaveLocation" value="Save Update Location">
+            <label> Species Allowed </label> 
+              <select name="species">
+                    <option value="NULL"> none </option>
+                {% for x in species_list %}
+                    <option value="{{x.species_name}}">{{x.species_name}}</option>
+                {% endfor %}
+              </select>
+
+      	  </fieldset>
+          <input class="btn btn-primary" type="submit" id="Add_Location" name="Add_Location" value="Add Location">
           <input class="btn" type="button" value="cancel" onClick="browseLocations()">
 	</form> 
-</div><!-- update -->
-<p>&nbsp;</p>
-<div id="delete" style="display: block">
-  <form method="POST" id="deleteLocations">
-      <legend><strong>Delete Location</strong></legend>
-          <fieldset class="fields">
-          <p>Are you sure you wish to delete the following?</p>
-          <input type="hidden" name="locationID" id="deletelocationID" value="1">
-          <label><strong>ID:</strong></label> 1
-            <label> <strong>Name</strong> </label> Enclosure
-            
-    </fieldset>
-    <input class="btn" type="submit" id="DeleteLocation" value="Delete Location">
-          <input class="btn" type="button" value="cancel" onClick="browseLocation()">
-  </form> 
-</div><!-- delete -->
+	</div>
 
 </body>
 </html>
