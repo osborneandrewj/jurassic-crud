@@ -1,9 +1,9 @@
 <html>
-<h1> Dinosaurs </h1>
+<h1> Dinosaur Assignments</h1>
  [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
 
 <head>
-	<title>Update Dinosaur</title>
+	<title>Update Dinosaur Assignment</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -39,15 +39,15 @@
             {% endif %} 
         </table>
 
-    <!-- form to update a Dinosaur-->
-    <form id="updateDinosaur" action="/update_dinosaur/{{data[0].ID}}" method="post">
-        <legend><strong>Update Dinosaur</strong></legend>
+    <!-- form to update a Assignment-->
+    <form id="updateAssignment" action="/updateAssignment/{{data[0].ID}}" method="POST">
+        <legend><strong>Update Dinosaur Assignment</strong></legend>
           <fieldset class="fields">
             <label> Name </label> <input type="text" id="name" name="name" value="{{data[0].Name}}" required>
-            <label> Species </label> 
-              <select name="species">
-                <option value="{{data[0].Species}}">{{data[0].Species}}</option>
-                {% for x in spec_data if x.species_name not in data[0].Species %}
+            <label> Dinosaur </label> 
+              <select name="dinosaur">
+                <option value="{{data[0].Dinosaurs}}">{{data[0].Dinosaurs}}</option>
+                {% for x in dino_data if x.name not in data[0].Dinosaurs %}
                   <option value="{{ x.species_name }}">{{ x.species_name }}</option>
                 {% endfor %}
               </select>
@@ -58,15 +58,9 @@
                     <option value="{{x.location_name}}">{{x.location_name}}</option>
                 {% endfor %}
               </select>
-	          <label> Health Status </label> 
-              <select name="status">
-                <option value="{{data[0].Status}}">{{data[0].Status}}</option>
-                {% for x in status_options if x not in data[0].Status %}
-                  <option value="{{ x }}">{{ x }}</option>
-                {% endfor %}
-              </select>
+	          <label>Assignment </label> <input class="form-control" type="text" name="description" required>
       </fieldset>
-      <input class="btn btn-primary" type="submit" id="Update_Dinosaur" name="Update_Dinosaur" value="Update Dinosaur">
-          <a href="/dinosaurs" class="btn btn-default">Cancel</a>
+      <input class="btn btn-primary" type="submit" id="updateAssignment" name="updateAssignment" value="Update Dinosaur Assignment">
+          <a href="/dinosaurAssignments" class="btn btn-default">Cancel</a>
 	</form> 
 </html>
