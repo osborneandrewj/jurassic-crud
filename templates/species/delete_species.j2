@@ -3,14 +3,14 @@
  [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
 A
 <head>
-	<title>Delete Dinosaur</title>
+	<title>Delete Species</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <div>
         <table border="1" cellpadding="5"> 
-            <caption> <h3>Are you sure you want to delete this dinosaur?</h3> </caption>
+            <caption> <h3>Are you sure you want to delete this species?</h3> </caption>
             <!-- Access data tuple passed from app.py -->
             {% if data %}
                 <thead>
@@ -40,9 +40,9 @@ A
         </table>
 
     <div id="delete">
-    <!-- buttons to delete a Dinosaur-->
-    <form id="deleteDinosaur" action="/delete_dinosaur/{{data[0].ID}}" method="post">
-          <input class="btn btn-primary" type="submit" id="Delete_Dinosaur" name="Delete_Dinosaur" value="Delete Dinosaur">
-          <a href="/dinosaurs" class="btn btn-default">Cancel</a>
+    <!-- buttons to delete a Species-->
+    <form id="deleteSpecies" action="/delete_species/{{data[0].ID}}" method="post">
+          <input class="btn btn-primary" type="submit" id="Delete_Species" name="Delete_Species" value="Delete Species">
+          <a href="/species" class="btn btn-default">Cancel</a>
 	</form> 
 </html>
