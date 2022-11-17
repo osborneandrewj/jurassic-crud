@@ -23,8 +23,8 @@ app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 mysql = MySQL(app)
 
 # Data used to pre-populate dropdown menus
-
 status_options = ["healthy", "sick", "injured"]
+diet_options = ["carnivor", "omnivore", "herbivore"]
 
 # Routes 
 
@@ -116,7 +116,6 @@ def update_dinosaur(id):
         cur.execute(species_query)
         spec_data = cur.fetchall()
 
-        # render edit_people page passing our query data and homeworld data to the edit_people template
         return render_template("update_dinosaur.j2", 
             data=data, locations=loc_data, 
             spec_data=spec_data, status_options=status_options)
@@ -179,14 +178,90 @@ def delete_dinosaur(id):
     # redirect back to dinosaur page
     return redirect("/dinosaurs")
 
-@app.route('/species')
+@app.route('/species', methods=["POST", "GET"])
 def species():
+    # Grab species data so we send it to our template to display
+    if request.method == "GET":
+        # mySQL query to grab all the Species
+        query = "SELECT Species.id AS 'ID', Species.species_name AS 'Species Name', Species.diet AS 'Diet' FROM Species;"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
 
-    query = "SELECT * FROM Species;"
-    cur = mysql.connection.cursor()
-    cur.execute(query)
-    results = cur.fetchall()
-    return render_template("species.j2", Species=results)
+        return render_template("/species/species.j2", data=data, diet_options=diet_options)
+
+    if request.method == "POST":
+        # fire off if user presses the Add Species button
+        if request.form.get("Add_Species"):
+            # grab user form inputs
+            name = request.form["name"]
+            diet = request.form["diet"]
+
+            query = "INSERT INTO Species(species_name, diet)\
+                VALUES(%s, %s);"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (name, diet))
+            mysql.connection.commit()
+
+        return redirect("/species")
+
+@app.route('/update_species/<int:id>', methods=["POST", "GET"])
+def update_species(id):
+    # Grab Species data so we send it to our template to display
+    if request.method == "GET":
+        # mySQL query to grab the specific species that the user selected
+        query = "SELECT Species.id AS 'ID', Species.species_name AS 'Species', Species.diet AS 'Diet'\
+            FROM Species\
+            WHERE Species.id = %s;"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (id,))
+        data = cur.fetchall()
+
+        return render_template("species/update_species.j2", 
+            data=data, diet_options=diet_options)
+
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("Update_Species"):
+            # grab user form inputs
+            name = request.form["name"]
+            diet = request.form["diet"]
+
+            query = "UPDATE Species\
+                SET species_name = %s,\
+                    diet = %s\
+                WHERE Species.id = %s;"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (name, diet, id))
+            mysql.connection.commit()
+
+        # redirect back to Dinosaurs page
+        return redirect("/species")
+
+# route for delete functionality, deleting a species from Species,
+# we want to pass the 'id' value of that species on button click 
+@app.route("/delete_species/<int:id>", methods=["POST", "GET"])
+def delete_species(id):
+
+    if request.method == "GET":
+        # mysql query to gather the form's data
+        query = "SELECT Species.id AS 'ID', Species.species_name AS 'Species Name', Species.diet AS 'Diet' FROM Species\
+            WHERE Species.id = %s;"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (id,))
+        data = cur.fetchall()
+
+        return render_template("/species/delete_species.j2", data=data)
+
+
+    if request.method == "POST":
+        query = "DELETE FROM Species WHERE Species.id = %s;"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (id,))
+        mysql.connection.commit()
+
+    # redirect back to Species page
+    return redirect("/species")
 
 
 @app.route('/dinosaurAssignments', methods=["POST", "GET"])
