@@ -1,0 +1,190 @@
+<html>
+<!-- Adapted from the people.html UI design -->
+<h1> Locations </h1>
+ [ <a href="dinosaurs">Dinosaurs</a> | <a href="species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+
+<head>
+<title>Locations</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript">
+		function showform(dowhat) {
+			/*
+			* four DIVS: browse, insert, update, delete
+			* this function sets one visible the others not
+			*/
+			if (dowhat == 'insert'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'block';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'none';
+			}
+			else if (dowhat == 'update'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'block';
+				document.getElementById('delete').style.display = 'none';
+			}
+			else if (dowhat == 'delete'){
+				document.getElementById('browse').style.display = 'none';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'block';
+			}
+      else if (dowhat == 'all'){
+				document.getElementById('browse').style.display = 'block';
+				document.getElementById('insert').style.display = 'block';
+				document.getElementById('update').style.display = 'block';
+				document.getElementById('delete').style.display = 'block';
+			}
+			else { //by default display browse
+				document.getElementById('browse').style.display = 'block';
+				document.getElementById('insert').style.display = 'none';
+				document.getElementById('update').style.display = 'none';
+				document.getElementById('delete').style.display = 'none';
+			}
+		}
+    function newLocation() { showform('insert'); }
+    function updateLocation(pid) { showform('update'); }
+    function deleteLocation(pid) { showform ('delete'); }
+    function browseLocations() { showform ('browse'); }
+    function showAll() { showform ('all'); }
+</script>
+</head>
+
+<body onload="browseLocations()">
+
+  <div id="browse">
+      <p><a href="#" onClick="newLocation()">Add New</a> </p>
+      <table border="1" cellpadding="5">
+        <!-- Access data tuple passed from app.py --> 
+        {% if data %}
+          <thead>
+            <tr>
+              <!-- Iterate through each key in the first entry to get the column name -->
+                {% for key in data[0].keys() %}
+                  <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                  <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                {% endfor %} 
+            </tr>
+
+          <tbody>
+            <!-- Now, iterate through every item in data -->
+            {% for item in data %}
+              <tr>
+                <!-- Then iterate through every key in the current item dictionary -->
+                {% for key in item.keys() %}
+                  <!-- Create a <td> element with the value of that key in it -->
+                  <td> {{item[key]}} </td> 
+                {% endfor %}
+                <!-- Create our edit/delete buttons -->
+                <td><a href="update_location/{{item.ID}}" class="btn btn-default">Edit</a></td>
+                <td><a href="delete_location/{{item.ID}}" class="btn btn-default">Delete</a></td>
+              </tr> 
+            {% endfor %} 
+        {% endif %} 
+      </table>   
+    <p>&nbsp;</p>
+  </div>	<!-- browse -->
+
+<div id="insert">
+    <form method="POST" id="addLocation">
+        <legend><strong>Add Location</strong></legend>
+          <fieldset class="fields">
+            <label> Name </label> <input type="text" name="name">
+            <label> Electric Grid Status </label> 
+              <select name="location">
+                <option value="0">&nbsp;</option>
+                <option value="1" selected>Online</option>
+                <option value="2">Reserve</option>
+                <option value="3">Offline</option>
+              </select>
+            <label> Security Status </label> 
+              <select name="location">
+            	  <option value="0">&nbsp;</option>
+                <option value="1" selected>Online</option>
+                <option value="2">Locked Down</option>
+                <option value="3">Offline</option>
+              </select>
+
+            <div>
+              <label> Permitted Species </label> 
+              <div>
+                <input type="checkbox" id="Tyrannosaurus" name="Tyrannosaurus" checked>
+                <label for="Tyrannosaurus">Tyrannosaurus</label>
+              </div>
+        
+              <div>
+                <input type="checkbox" id="Velociraptor" name="Velociraptor">
+                <label for="Velociraptor">Velociraptor</label>
+              </div>
+              <div>
+                <input type="checkbox" id="Brachiosaurus" name="Brachiosaurus">
+                <label for="Brachiosaurus">Brachiosaurus</label>
+              </div>
+            </div>
+            
+      </fieldset>
+          <input class="btn" type="submit" id="addLocation" value="Add Location">
+          <input class="btn" type="button" value="cancel" onClick="browseLocation()">
+	</form> 
+</div><!-- insert -->
+<p>&nbsp;</p>
+<div id="update">
+    <form method="POST" id="UpdateLocation">
+        <legend><strong>Update Location</strong></legend>
+          <fieldset class="fields">
+          <input type="hidden" name="locationeID" id="updatelocationID" value="1">
+          <label> ID: </label> 1
+            <label> Name </label> <input type="text" name="name" value="Med Bay">
+            <label> Electric Grid Status </label> <select name="location">
+            	<option value="0">&nbsp;</option>
+                <option value="1" selected>Online</option>
+                <option value="2">Reserve</option>
+                <option value="3">Offline</option>
+                </select>
+            <label> Security Status </label> <select name="location">
+            	<option value="0">&nbsp;</option>
+                <option value="1" selected>Online</option>
+                <option value="2">Locked Down</option>
+                <option value="3">Offline</option>
+                </select>
+                
+                <div>
+                  <label> Permitted Species </label> 
+                  <div>
+                    <input type="checkbox" id="Tyrannosaurus" name="Tyrannosaurus" >
+                    <label for="Tyrannosaurus">Tyrannosaurus</label>
+                  </div>
+            
+                  <div>
+                    <input type="checkbox" id="Velociraptor" name="Velociraptor">
+                    <label for="Velociraptor">Velociraptor</label>
+                  </div>
+                  <div>
+                    <input type="checkbox" id="Brachiosaurus" name="Brachiosaurus" checked>
+                    <label for="Brachiosaurus">Brachiosaurus</label>
+                  </div>
+                </div>
+      </fieldset>
+          <input class="btn" type="submit" id="UpdateSaveLocation" value="Save Update Location">
+          <input class="btn" type="button" value="cancel" onClick="browseLocations()">
+	</form> 
+</div><!-- update -->
+<p>&nbsp;</p>
+<div id="delete" style="display: block">
+  <form method="POST" id="deleteLocations">
+      <legend><strong>Delete Location</strong></legend>
+          <fieldset class="fields">
+          <p>Are you sure you wish to delete the following?</p>
+          <input type="hidden" name="locationID" id="deletelocationID" value="1">
+          <label><strong>ID:</strong></label> 1
+            <label> <strong>Name</strong> </label> Enclosure
+            
+    </fieldset>
+    <input class="btn" type="submit" id="DeleteLocation" value="Delete Location">
+          <input class="btn" type="button" value="cancel" onClick="browseLocation()">
+  </form> 
+</div><!-- delete -->
+
+</body>
+</html>

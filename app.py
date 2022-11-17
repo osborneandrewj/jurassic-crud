@@ -277,17 +277,17 @@ def employees():
     query = "SELECT * FROM Employees;"
     cur = mysql.connection.cursor()
     cur.execute(query)
-    results = cur.fetchall()
-    return render_template("employees.j2", Species=results)
+    data = cur.fetchall()
+    return render_template("employees.j2", data=data)
 
 
-@app.route('/locations')
+@app.route('/locations', methods=["POST", "GET"])
 def locations():
-    query = "SELECT * FROM Locations;"
+    query = "SELECT id FROM Locations;"
     cur = mysql.connection.cursor()
     cur.execute(query)
     results = cur.fetchall()
-    return render_template("locations.j2", Locations=results)
+    return render_template("/locations/locations.j2", Locations=results)
 
 
 @app.route('/visitors')
