@@ -344,7 +344,7 @@ def deleteAssignment(id):
     # redirect back to dinosaur page
     return redirect("/dinosaurAssignments")
 
-@app.route('/updateAssignement/<int:id>', methods=["POST", "GET"])
+@app.route('/updateAssignment/<int:id>', methods=["POST", "GET"])
 def updateAssignment(id):
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
