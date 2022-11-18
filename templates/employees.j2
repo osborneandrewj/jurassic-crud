@@ -1,197 +1,169 @@
 <html>
+<!-- Adapted from the people.html UI design -->
+<h1> Employees </h1>
+ [ <a href="dinosaurs">Dinosaurs</a> | <a href="species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+
 <head>
-<title>Employees</title>
-<link href="style.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript">
-		function showform(dowhat) {
-			/*
-			* four DIVS: browse, insert, update, delete
-			* this function sets one visible the others not
-			*/
-			if (dowhat == 'insert'){
-				document.getElementById('browse').style.display = 'none';
-				document.getElementById('insert').style.display = 'block';
-				document.getElementById('update').style.display = 'none';
-				document.getElementById('delete').style.display = 'none';
-			}
-			else if (dowhat == 'update'){
-				document.getElementById('browse').style.display = 'none';
-				document.getElementById('insert').style.display = 'none';
-				document.getElementById('update').style.display = 'block';
-				document.getElementById('delete').style.display = 'none';
-			}
-			else if (dowhat == 'delete'){
-				document.getElementById('browse').style.display = 'none';
-				document.getElementById('insert').style.display = 'none';
-				document.getElementById('update').style.display = 'none';
-				document.getElementById('delete').style.display = 'block';
-			}
-      else if (dowhat == 'all'){
-				document.getElementById('browse').style.display = 'block';
-				document.getElementById('insert').style.display = 'block';
-				document.getElementById('update').style.display = 'block';
-				document.getElementById('delete').style.display = 'block';
-			}
-			else { //by default display browse
-				document.getElementById('browse').style.display = 'block';
-				document.getElementById('insert').style.display = 'none';
-				document.getElementById('update').style.display = 'none';
-				document.getElementById('delete').style.display = 'none';
-			}
+	<title>Employees</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
 		}
-    function newEmployee() { showform('insert'); }
-    function updateEmployee(pid) { showform('update'); }
-    function deleteEmployee(pid) { showform ('delete'); }
-    function browseEmployees() { showform ('browse'); }
-    function showAll() { showform ('all'); }
-</script>
+	}
+	function newEmployee() {
+		showform('insert');
+	}
+	function updateEmployee(pid) {
+		showform('update');
+	}
+	function deleteEmployee(pid) {
+		showform('delete');
+	}
+	function browseEmployees() {
+		showform('browse');
+	}
+	function showAll() {
+		showform('all');
+	}
+	</script>
 </head>
 
 <body onload="browseEmployees()">
-<h1>Employees</h1>
+	<div id="browse">
+		<p><a href="#" onClick="newEmployee()">Add New</a> </p>
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
 
-[ <a href="dinosaurs">Dinosaurs</a> | <a href="species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+				<tbody>
+					<!-- Now, iterate through every item in data -->
+                    {% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
 
-<div id="browse">
-<p><a href="#" onClick="showAll()">Display all forms</a> </p>
-<table border="1" cellpadding="5">
-  <tr>
-    <th><a href="#" onClick="newEmployee()">New</a></th>
-    <th></th>
-    <th>ID</th>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Job Title</th>
-    <th>Salary</th>
-    <th>Health Status</th>
-    <th>Location</th>
-  </tr>
-  <tr>
-    <td><a href="#" onClick="updateEmployee('this.employeeID')">Edit</a></td>
-    <td><a href="#" onclick="deleteEmployee('this.employeeID')">Delete</a></td>
-    <td align="right" >1</td>
-    <td >William</td>
-    <td >Heggerdon</td>
-    <td align="right" >security specialist</td>
-    <td>34000</td>
-    <td>healthy</td>
-    <td>Enclosure</td>
-  </tr>
-  
-  <tr>
-    <td><a href="#" onClick="updateEmployee('this.employeeID')">Edit</a></td>
-    <td><a href="#" onclick="deleteEmployee('this.employeeID')">Delete</a></td>
-    <td align="right" >2</td>
-    <td>Lee</td>
-    <td>Taylor</td>
-    <td align="right" >biologist</td>
-    <td >334000</td>
-    <td>healthy</td>
-    <td>Med Bay</td>
-  </tr>
-  <tr>
-    <td><a href="#" onClick="updateEmployee('this.employeeID')">Edit</a></td>
-    <td><a href="#" onclick="deleteEmployee('this.employeeID')">Delete</a></td>
-    <td align="right">3</td>
-    <td>Dennis</td>
-    <td>Nedry</td>
-    <td align="right" >programmer</td>
-    <td>94000</td>
-    <td>injured</td>
-    <td>Hotel</td>
-  </tr>
-  <tr>
-    <td><a href="#" onClick="updateEmployee('this.employeeID')">Edit</a></td>
-    <td><a href="#" onclick="deleteEmployee('this.employeeID')">Delete</a></td>
-    <td align="right" >4</td>
-    <td >Jack</td>
-    <td >Harckness</td>
-    <td align="right" >jr. security specialist</td>
-    <td>30000</td>
-    <td>healthy</td>
-    <td>Enclosure</td>
-  </tr>
-</table>
-<p>&nbsp;</p>
-</div> <!-- browse -->
-<div id="insert">
-    <form method="POST" id="addEmployee">
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+                            <td><a href="update_employee/{{item.id}}" class="btn btn-default">Edit</a></td>
+                            <td><a href="delete_employee/{{item.id}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+    <!-- form to create a new Employee-->
+    <form id="insertEmployee" action="/employees" method="post">
         <legend><strong>Add Employee</strong></legend>
           <fieldset class="fields">
-            <label> Name </label> <input type="text" name="name">
-            <label> Job Title </label> <input type="text" name="jobTitle">
+            <label> First Name </label> <input type="text" id="f_name" name="f_name" placeholder="First Name" required>
+            <label> Last Name </label> <input type="text" id="l_name" name="l_name" placeholder="Last Name" required>
+            <label> Job Title </label> <input type="text" id="job_title" name="job_title" placeholder="Job Title" required>
+            <label> Salary </label> <input type="text" id="salary" name="salary" placeholder="" required>
             <label> Location </label> 
               <select name="location">
-            	  <option value="0">&nbsp;</option>
-                <option value="1" selected>Visitor Center</option>
-                <option value="2">Security Building</option>
-                <option value="3">Velociraptor Enclosure</option>
+            	<option value="0">&nbsp;</option>
+                {% for x in locations %}
+                    <option value="{{x.location_name}}">{{x.location_name}}</option>
+                {% endfor %}
               </select>
-	          <label> Salary </label> <input type="text" name="salary" >
 	          <label> Health Status </label> 
-              <select name="health">
+              <select name="status">
                 <option value="0">&nbsp;</option>
-                <option value="1" selected>Healthy</option>
-                <option value="2">Sick</option>
-                <option value="3">Injured</option>
+                <option value="healthy" selected>Healthy</option>
+                <option value="sick">Sick</option>
+                <option value="injured">Injured</option>
               </select>
-            
-      </fieldset>
-          <input class="btn" type="submit" id="addEmployee" value="Add Employee">
-          <input class="btn" type="button" value="cancel" onClick="browseEmployee()">
-	</form> 
-</div><!-- insert -->
-<p>&nbsp;</p>
-<div id="update">
-    <form method="POST" id="UpdateEmployee">
-        <legend><strong>Update Employee</strong></legend>
-          <fieldset class="fields">
-          <input type="hidden" name="employeeID" id="updateemployeeID" value="1">
-          <label> ID: </label> 1
-            <label> Name </label> <input type="text" name="name" value="William">
-            <label> Job Title </label> <input type="text" name="jobTitle" value="Biologist">
-            <label> Location </label> 
-              <select name="location">
-            	  <option value="0">&nbsp;</option>
-                <option value="1" selected>Visitor Center</option>
-                <option value="2">Security Building</option>
-                <option value="3">Velociraptor Enclosure</option>
-              </select>
-	          <label> Salary </label> <input type="text" name="salary" >
-	          <label> Health Status </label> 
-              <select name="health">
-                <option value="0">&nbsp;</option>
-                <option value="1" selected>Healthy</option>
-                <option value="2">Sick</option>
-                <option value="3">Injured</option>
-              </select>
-            <label> Assigned Dinosaurs </label> 
-              <select name="health">
-                <option value="0">&nbsp;</option>
-                <option value="1" selected>None</option>
-                <option value="2">Good Girl</option>
-                <option value="3">Sue</option>
-              </select>
-      </fieldset>
-          <input class="btn" type="submit" id="UpdateSaveEmployee" value="Save Update Employee">
+      	  </fieldset>
+          <input class="btn btn-primary" type="submit" id="Add_Employee" name="Add_Employee" value="Add Employee">
           <input class="btn" type="button" value="cancel" onClick="browseEmployees()">
 	</form> 
-</div><!-- update -->
-<p>&nbsp;</p>
-<div id="delete" style="display: block">
-  <form method="POST" id="deleteEmployees">
-      <legend><strong>Delete Employee</strong></legend>
-          <fieldset class="fields">
-          <p>Are you sure you wish to delete the following?</p>
-          <input type="hidden" name="employeeID" id="deleteemployeeID" value="1">
-          <label><strong>ID:</strong></label> 1
-            <label> <strong>Name</strong> </label> Dennis Nedry
-            
-    </fieldset>
-    <input class="btn" type="submit" id="DeleteEmployee" value="Delete Employee">
-          <input class="btn" type="button" value="cancel" onClick="browseEmployee()">
-  </form> 
-</div><!-- delete -->
+</div><!-- insert -->
+	<div id="edit">
+		<!-- form to edit data in Employees-->
+		<form id="editEmployee" action="/edit_employee/{{data[0].id}}" method="post">
+			<legend><strong>Edit Employee</strong></legend>
+			<fieldset>
+				<input type="hidden" value="{{data[0].id}}" class="form-control" id="personID" name="personID" required>
+				<label for="make">first name:</label>
 
+				<input type="text" class="form-control" id="fname" name="fname" pattern="[A-Za-z]{1,}" placeholder="{{data[0].fname}}" required>
+				<label for="model">last name:</label>
+
+				<input type="text" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].lname}}" required>
+				<label for="year">homeworld:</label>
+
+				<select class="form-control" id="homeworld" name="homeworld" pattern="[0-4]{1}" placeholder="" required>
+					<option value="0">&nbsp;</option>
+					<option value="1">Gemenon</option>
+					<option value="2">Leonis</option>
+					<option value="3">Caprica</option>
+					<option value="{{data[0].homeworld}}" selected></option>
+				</select>
+
+				<label for="color">age:</label>
+				<input type="text" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].age}}" required> </fieldset>
+				<input class="btn" type="button" value="Cancel" onClick="browsePeople()" style="margin:.5rem;"> 
+        </form>
+	</div><!--edit-->
+    <div id="delete" style="display: block">
+        <form id="deleteEmployee" action="/delete_employee/{{data[0].ID}}" method="POST">
+            <legend><strong>Delete Employee</strong></legend>
+            <fieldset class="fields">
+                <p>Are you sure you wish to delete the following?</p>
+                <input type="hidden" name="locationID" id="deletelocationID" value="{{data[0].ID}}">
+                <label><strong>ID:</strong></label> 
+                <label> <strong>Name</strong> </label> Enclosure
+            </fieldset>
+            <input class="btn" type="submit" id="DeleteEmployee" value="Delete Employee">
+            <input class="btn" type="button" value="cancel" onClick="browseEmployees()">
+        </form> 
+    </div><!-- delete -->
 </body>
 </html>

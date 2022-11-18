@@ -65,7 +65,7 @@
   </tr>
   {% for dinosaur_assignment in dinosaur_assignments %}
   <tr>
-    <td><a href="#" onClick="updateDinosaurAssignment('this.DinosaurAssignmentID')">Edit</a></td>
+    <td><a href="updateAssignment/{{dinosaur_assignment.id}}">Edit</a></td>
     <td><a href="deleteAssignment/{{dinosaur_assignment.id}}">Delete</a></td>
     {% for key in dinosaur_assignment.keys() %}
     <td >{{dinosaur_assignment[key]}}</td>

@@ -1,16 +1,16 @@
 <html>
-<h1> Dinosaurs </h1>
+<h1> Visitors </h1>
  [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
 
 <head>
-	<title>Update Dinosaur</title>
+	<title>Update Visitor</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <div>
         <table border="1" cellpadding="5"> 
-            <caption> <h3>Are you sure you want to update this dinosaur?</h3> </caption>
+            <caption> <h3>Are you sure you want to update this visitor?</h3> </caption>
             <!-- Access data tuple passed from app.py -->
             {% if data %}
                 <thead>
@@ -39,25 +39,15 @@
             {% endif %} 
         </table>
 
-    <!-- form to update a Dinosaur-->
-    <form id="updateDinosaur" action="/update_dinosaur/{{data[0].ID}}" method="post">
-        <legend><strong>Update Dinosaur</strong></legend>
+    <!-- form to update a Visitor-->
+    <form id="updateVisitor" action="/update_visitor/{{data[0].ID}}" method="post">
+        <legend><strong>Update Visitor</strong></legend>
           <fieldset class="fields">
-            <label> Name </label> <input type="text" id="name" name="name" value="{{data[0].Name}}" required>
-            <label> Name </label> <input type="text" id="name" name="name" value="{{data[0].Name}}" required>
-            <label> Species </label> 
-              <select name="species">
-                <option value="{{data[0].Species}}">{{data[0].Species}}</option>
-                {% for x in spec_data if x.species_name not in data[0].Species %}
-                  <option value="{{ x.species_name }}">{{ x.species_name }}</option>
-                {% for x in spec_data if x.species_name not in data[0].Species %}
-                  <option value="{{ x.species_name }}">{{ x.species_name }}</option>
-                {% endfor %}
-              </select>
+            <label> First Name </label> <input type="text" id="f_name" name="f_name" value="{{data[0].f_name}}" required>
+            <label> Last Name </label> <input type="text" id="l_name" name="l_name" value="{{data[0].l_name}}" required>
             <label> Location </label> 
               <select name="location">
             	<option value="{{data[0].Location}}">{{data[0].Location}}</option>
-                {% for x in locations if x.location_name not in data[0].Location %}
                 {% for x in locations if x.location_name not in data[0].Location %}
                     <option value="{{x.location_name}}">{{x.location_name}}</option>
                 {% endfor %}
@@ -68,12 +58,9 @@
                 {% for x in status_options if x not in data[0].Status %}
                   <option value="{{ x }}">{{ x }}</option>
                 {% endfor %}
-                {% for x in status_options if x not in data[0].Status %}
-                  <option value="{{ x }}">{{ x }}</option>
-                {% endfor %}
               </select>
       </fieldset>
-      <input class="btn btn-primary" type="submit" id="Update_Dinosaur" name="Update_Dinosaur" value="Update Dinosaur">
-          <a href="/dinosaurs" class="btn btn-default">Cancel</a>
+      <input class="btn btn-primary" type="submit" id="Update_Visitor" name="Update_Visitor" value="Update Visitor">
+          <a href="/visitors" class="btn btn-default">Cancel</a>
 	</form> 
 </html>
