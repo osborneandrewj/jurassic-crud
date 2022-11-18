@@ -640,6 +640,12 @@ def delete_location(id):
 def update_location(id):
     # Grab Species data so we send it to our template to display
     if request.method == "GET":
+        # mySQL query to grab data for the species list menu
+        species_query = "SELECT species_name from Species;"
+        cur = mysql.connection.cursor()
+        cur.execute(species_query)
+        species_list = cur.fetchall()
+
         # mySQL query to grab permitted species data
         permitted_species_query = "SELECT Locations.id, Species.species_name\
             FROM Locations\
@@ -661,7 +667,7 @@ def update_location(id):
 
         return render_template("locations/update_location.j2", 
             data=data, permitted_species=permitted_species, security_status_options=security_status_options, 
-            electric_status_options=electric_status_options)
+            electric_status_options=electric_status_options, species_list=species_list)
 
     if request.method == "POST":
         # fire off if user presses the edit location button
@@ -670,13 +676,14 @@ def update_location(id):
             name = request.form["name"]
             electrical = request.form["electrical"]
             security = request.form["security"]
+            allow_species = request.form.get("allow_species")
+            print(allow_species)
 
             query = "UPDATE Locations\
                 SET location_name = %s,\
                     electric_grid_status = %s,\
                     security_status = %s\
                 WHERE Locations.id = %s;"
-            print(query)
             cur = mysql.connection.cursor()
             cur.execute(query, (name, electrical, security, id))
             mysql.connection.commit()

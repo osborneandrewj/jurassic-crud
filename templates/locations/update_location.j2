@@ -69,6 +69,15 @@
                     <option value="{{ x }}">{{ x }}</option>
                 {% endfor %}
               </select>
+              <div>
+                <label> Permitted Species </label>
+                    <ul>
+                        {% for x in species_list %}
+                            <li><input type="checkbox" name="allow_species[]" value="{{x.species_name}}"> {{x.species_name}}</li>
+                        {% endfor %}
+                    </ul> 
+                </div>
+</select>  
 	          
       </fieldset>
       <input class="btn btn-primary" type="submit" id="Update_Location" name="Update_Location" value="Update Location">
