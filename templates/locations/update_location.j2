@@ -1,6 +1,6 @@
 <html>
 <h1> Locations </h1>
- [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+ [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="/locations">Locations</a> ]
 
 <head>
 	<title>Update Location</title>
@@ -73,8 +73,15 @@
                 <label> Permitted Species </label>
                     <ul>
                         {% for x in species_list %}
-                            <li><input type="checkbox" name="allow_species[]" value="{{x.species_name}}"> {{x.species_name}}</li>
+                            {% if x.id not in permitted_species_ids %}
+                                <li><input type="checkbox" name="allow_species" value="{{x.id}}"> {{x.species_name}}</li>
+                            {% endif %}
                         {% endfor %}
+                        {% for item in data %}
+                            {% for x in permitted_species %}
+                                <li><input type="checkbox" name="allow_species" value="{{x.s_id}}" checked> {{x.species_name}}</li>
+                            {% endfor %}
+                        {% endfor %} 
                     </ul> 
                 </div>
 </select>  

@@ -22,7 +22,7 @@ app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 mysql = MySQL(app)
 
-# Data used to pre-populate dropdown menus
+# Data used to pre-populate dropdown menu options
 status_options = ["healthy", "sick", "injured"]
 diet_options = ["carnivor", "omnivore", "herbivore"]
 electric_status_options = ["online", "reserve", "offline"]
@@ -641,19 +641,23 @@ def update_location(id):
     # Grab Species data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab data for the species list menu
-        species_query = "SELECT species_name from Species;"
+        species_query = "SELECT species_name, id from Species;"
         cur = mysql.connection.cursor()
         cur.execute(species_query)
         species_list = cur.fetchall()
 
         # mySQL query to grab permitted species data
-        permitted_species_query = "SELECT Locations.id, Species.species_name\
+        permitted_species_query = "SELECT Locations.id, Species.species_name, Species.id AS s_id\
             FROM Locations\
             INNER JOIN Species_Allowed_Locations ON Locations.id = Species_Allowed_Locations.l_id\
-            INNER JOIN Species ON Species_Allowed_Locations.s_id = Species.id;"
+            INNER JOIN Species ON Species_Allowed_Locations.s_id = Species.id\
+            WHERE Locations.id = %s;"
         cur = mysql.connection.cursor()
-        cur.execute(permitted_species_query)
+        cur.execute(permitted_species_query, (id,))
         permitted_species = cur.fetchall()
+        permitted_species_ids = []
+        for item in permitted_species:
+            permitted_species_ids.append(item["s_id"])
 
         query = "SELECT Locations.id AS 'ID',\
             Locations.location_name AS 'Name',\
@@ -666,7 +670,8 @@ def update_location(id):
         data = cur.fetchall()
 
         return render_template("locations/update_location.j2", 
-            data=data, permitted_species=permitted_species, security_status_options=security_status_options, 
+            data=data, permitted_species=permitted_species, permitted_species_ids=permitted_species_ids, 
+            security_status_options=security_status_options, 
             electric_status_options=electric_status_options, species_list=species_list)
 
     if request.method == "POST":
@@ -676,8 +681,41 @@ def update_location(id):
             name = request.form["name"]
             electrical = request.form["electrical"]
             security = request.form["security"]
-            allow_species = request.form.get("allow_species")
-            print(allow_species)
+            user_selected_species = request.form.getlist("allow_species")
+
+            # mySQL query to grab permitted species data
+            permitted_species_query = "SELECT Locations.id, Species.species_name, Species.id AS s_id\
+                FROM Locations\
+                INNER JOIN Species_Allowed_Locations ON Locations.id = Species_Allowed_Locations.l_id\
+                INNER JOIN Species ON Species_Allowed_Locations.s_id = Species.id\
+                WHERE Locations.id = %s;"
+            cur = mysql.connection.cursor()
+            cur.execute(permitted_species_query, (id,))
+            permitted_species = cur.fetchall()
+            permitted_species_ids = []
+            for item in permitted_species:
+                permitted_species_ids.append(item["s_id"])
+
+            duplicate_list = []
+            # delete all intermediary species tables not in user selection
+            for s_id in permitted_species_ids:
+                if s_id not in user_selected_species:
+                    duplicate_list.append(s_id)
+                    query = "DELETE from Species_Allowed_Locations\
+                        WHERE Species_Allowed_Locations.l_id = %s\
+                        AND Species_Allowed_Locations.s_id = %s;"
+                    cur = mysql.connection.cursor()
+                    cur.execute(query, (id, s_id))
+                    mysql.connection.commit()
+
+            # then iterate through the list of user species selections and add any additional tables
+            for item in user_selected_species:
+                if item not in duplicate_list:
+                    query = "INSERT INTO Species_Allowed_Locations(s_id, l_id)\
+                        VALUES(%s, %s);"
+                    cur = mysql.connection.cursor()
+                    cur.execute(query, (item, id))
+                    mysql.connection.commit()  
 
             query = "UPDATE Locations\
                 SET location_name = %s,\
