@@ -39,7 +39,10 @@ def dinosaurs():
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the people in bsg_people
-        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status' FROM Dinosaurs INNER JOIN Species ON Dinosaurs.species_id = Species.id INNER JOIN Locations ON Dinosaurs.location_id = Locations.id"
+        query = "SELECT Dinosaurs.id AS 'ID', Dinosaurs.name AS 'Name', Species.species_name AS 'Species', Locations.location_name AS 'Location', Dinosaurs.health_status AS 'Status'\
+            FROM Dinosaurs\
+            INNER JOIN Species ON Dinosaurs.species_id = Species.id\
+            LEFT OUTER JOIN Locations ON Dinosaurs.location_id = Locations.id;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -550,7 +553,7 @@ def update_employee(id):
         return redirect("/employees")
 
 
-@app.route('/locations')
+@app.route('/locations', methods=["POST", "GET"])
 def locations():
 
     if request.method == "GET":
@@ -583,7 +586,7 @@ def locations():
             electric_status_options=electric_status_options)
 
     if request.method == "POST":
-        # fire off if user presses the Add Species button
+        # fire off if user presses the Add Location button
         if request.form.get("Add_Location"):
             # grab user form inputs
             name = request.form["name"]
