@@ -1,0 +1,66 @@
+<html>
+<h1> Dinosaur Assignments </h1>
+ [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+
+<head>
+	<title>Update Assignment</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div>
+        <table border="1" cellpadding="5"> 
+            <caption> <h3>Are you sure you want to update this assignment?</h3> </caption>
+            <!-- Access data tuple passed from app.py -->
+            {% if data %}
+                <thead>
+                    <tr>
+                        <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+                <tbody>
+                    <!-- Now, iterate through every item in data -->
+                    {% for item in data %}
+                    <tr>
+                        <!-- Then iterate through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+                        
+                        <!-- Create a <td> element with the value of that key in it -->
+                        <td>{{item[key]}}</td> {% endfor %} 
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+        </table>
+
+    <!-- form to update an Assignment-->
+    <form id="updateAssignment" action="/update_assignment/{{data[0].ID}}" method="post">
+        <legend><strong>Update Assignment</strong></legend>
+          <fieldset class="fields">
+            <label> Dinosaur </label> 
+              <select name="dinosaur">
+            	<option value="{{data[0].Dinosaur}}">{{data[0].Dinosaur}}</option>
+                {% for x in dinosaurs if x.name not in data[0].Dinosaur %}
+                    <option value="{{x.name}}">{{x.name}}</option>
+                {% endfor %}
+              </select>
+            
+            <label> Employee Assigned </label> 
+              <select name="employee">
+            	<option value="{{data[0].Employee}}">{{data[0].Employee}}</option>
+                {% for x in employees if x.Employee not in data[0].Employee %}
+                    <option value="{{x.Employee}}">{{x.Employee}}</option>
+                {% endfor %}
+              </select>
+	          <label> Description </label> <input type="text" id="description" name="description" value="{{data[0].f_name}}" required>
+      </fieldset>
+      <input class="btn btn-primary" type="submit" id="Update_Assignment" name="Update_Assignment" value="Update Assignment">
+          <a href="/dinosaurAssignments" class="btn btn-default">Cancel</a>
+	</form> 
+</html>
