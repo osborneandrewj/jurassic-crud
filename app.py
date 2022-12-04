@@ -104,7 +104,7 @@ def update_dinosaur(id):
             Dinosaurs.health_status AS 'Status'\
             FROM Dinosaurs\
                 INNER JOIN Species ON Dinosaurs.species_id = Species.id\
-                INNER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
+                LEFT OUTER JOIN Locations ON Dinosaurs.location_id = Locations.id WHERE Dinosaurs.id = %s"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
@@ -114,6 +114,7 @@ def update_dinosaur(id):
         cur = mysql.connection.cursor()
         cur.execute(location_query)
         loc_data = cur.fetchall()
+        print("loc_data: " + str(loc_data))
 
         # mySQL query to grab data for the species dropdown menu
         species_query = "SELECT species_name from Species;"
@@ -126,7 +127,7 @@ def update_dinosaur(id):
             spec_data=spec_data, status_options=status_options)
 
     if request.method == "POST":
-        # fire off if user presses the Add Person button
+        # fire off if user presses the Update Dinosaur button
         if request.form.get("Update_Dinosaur"):
             # grab user form inputs
             species = request.form["species"]
