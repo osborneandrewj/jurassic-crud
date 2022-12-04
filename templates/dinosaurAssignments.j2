@@ -1,140 +1,152 @@
 <html>
+<!-- Adapted from the people.html UI design -->
+<h1> Dinosaur Assignments </h1>
+ [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="/employees">Employees</a> | <a href="/visitors">Visitors</a> | <a href="/dinosaurAssignments">Dinosaur Assignments</a> | <a href="/locations">Locations</a> ]
 <head>
-<title>Dinosaur Assignments</title>
-<link href="style.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript">
-		function showform(dowhat) {
-			/*
-			* four DIVS: browse, insert, update, delete
-			* this function sets one visible the others not
-			*/
-			if (dowhat == 'insert'){
-				document.getElementById('browse').style.display = 'none';
-				document.getElementById('insert').style.display = 'block';
-				document.getElementById('update').style.display = 'none';
-				document.getElementById('delete').style.display = 'none';
-			}
-			else if (dowhat == 'update'){
-				document.getElementById('browse').style.display = 'none';
-				document.getElementById('insert').style.display = 'none';
-				document.getElementById('update').style.display = 'block';
-				document.getElementById('delete').style.display = 'none';
-			}
-			else if (dowhat == 'delete'){
-				document.getElementById('browse').style.display = 'none';
-				document.getElementById('insert').style.display = 'none';
-				document.getElementById('update').style.display = 'none';
-				document.getElementById('delete').style.display = 'block';
-			}
-      else if (dowhat == 'all'){
-				document.getElementById('browse').style.display = 'block';
-				document.getElementById('insert').style.display = 'block';
-				document.getElementById('update').style.display = 'block';
-				document.getElementById('delete').style.display = 'block';
-			}
-			else { //by default display browse
-				document.getElementById('browse').style.display = 'block';
-				document.getElementById('insert').style.display = 'none';
-				document.getElementById('update').style.display = 'none';
-				document.getElementById('delete').style.display = 'none';
-			}
+	<title>Dinosaur Assignments</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
 		}
-    function newDinosaurAssignment() { showform('insert'); }
-    function updateDinosaurAssignment(pid) { showform('update'); }
-    function deleteDinosaurAssignment(pid) { showform ('delete'); }
-    function browseDinosaurAssignments() { showform ('browse'); }
-    function showAll() { showform ('all'); }
-</script>
+	}
+	function newDinosaurAssignment() {
+		showform('insert');
+	}
+	function updateVisitor(pid) {
+		showform('update');
+	}
+	function deleteVisitor(pid) {
+		showform('delete');
+	}
+	function browseDinosaurAssignments() {
+		showform('browse');
+	}
+	function showAll() {
+		showform('all');
+	}
+	</script>
 </head>
 
 <body onload="browseDinosaurAssignments()">
-<h1>Dinosaur Assignments</h1>
+	<div id="browse">
+		<p><a href="#" onClick="newDinosaurAssignment()">Add New</a> </p>
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
 
-[ <a href="dinosaurs">Dinosaurs</a> | <a href="species">Species</a> | <a href="employees">Employees</a> | <a href="visitors">Visitors</a> | <a href="dinosaurAssignments">Dinosaur Assignments</a> | <a href="locations">Locations</a> ]
+				<tbody>
+					<!-- Now, iterate through every item in data -->
+                    {% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
 
-<div id="browse">
-<p><a href="#" onClick="showAll()">Display all forms</a> </p>
-<table border="1" cellpadding="5">
-  <tr>
-    <th><a href="#" onClick="newDinosaurAssignment()">New</a></th>
-    <th></th>
-    <th>ID</th>
-    <th>Dinosaur</th>
-    <th>Employee Assigned</th>
-    <th>Assignment</th>
-  </tr>
-  {% for dinosaur_assignment in dinosaur_assignments %}
-  <tr>
-    <td><a href="updateAssignment/{{dinosaur_assignment.id}}">Edit</a></td>
-    <td><a href="deleteAssignment/{{dinosaur_assignment.id}}">Delete</a></td>
-    {% for key in dinosaur_assignment.keys() %}
-    <td >{{dinosaur_assignment[key]}}</td>
-    {% endfor %}   
-  </tr>
-  {% endfor %}     
-</table>
-<p>&nbsp;</p>
-</div> <!-- browse -->
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
 
-<div id="insert">
-    <form id="addDinosaurAssignment" action="/dinosaurAssignments" method="POST">
+                            <!-- Create our edit/delete buttons -->
+                            <td><a href="update_assignment/{{item.ID}}" class="btn btn-default">Edit</a></td>
+                            <td><a href="delete_assignment/{{item.ID}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+    <!-- form to create a new Assignment-->
+    <form id="insertAssignment" action="/dinosaurAssignments" method="post">
         <legend><strong>Add Dinosaur Assignment</strong></legend>
           <fieldset class="fields">
-            <label for="dinosaur"> Dinosaur Name </label> 
-            <select name="dinosaur" id="dinosaur">
-              <option value=""></option>
-              {% for dino in dinosaurs %}
-              <option value="{{dino['name']}}">{{dino['name']}}</option>
-              {% endfor %}
-            </select>
-            <label for="employee"> Employee Name </label> 
-            <select name="employee" id="employee">
-              <option value=""></option>
-              {% for employee in employees %}
-              <option value="{{employee['employee']}}">{{employee['employee']}}</option>
-              {% endfor %}
-            </select>
-            <label>Assignment </label> <input class="form-control" type="text" name="description" required>
+            <label> Dinosaur </label> 
+              <select name="dinosaur">
+            	<option value="0">&nbsp;</option>
+                {% for x in dinosaurs %}
+                    <option value="{{x.name}}">{{x.name}}</option>
+                {% endfor %}
+              </select>
+            <label> Employee </label> 
+              <select name="employee">
+            	<option value="0">&nbsp;</option>
+                {% for x in employees %}
+                    <option value="{{x.employee}}">{{x.employee}}</option>
+                {% endfor %}
+              </select>
             
+            <label> Assignment </label> <input type="text" id="description" name="description"  required>
             
-      </fieldset>
-      <input class="btn-primary" type="submit" name="addDinosaurAssignment" id="addDinosaurAssignment" value="Add Dinosaur Assignment">
-      <input class="btn" type="button" value="cancel" onClick="browseDinosaurAssignment()">
-	  </form> 
-</div><!-- insert -->
-<p>&nbsp;</p>
-
-
-<div id="update">
-    <form method="POST" id="UpdateDinosaurAssignment">
-        <legend><strong>Update Dinosaur Assignment</strong></legend>
-          <fieldset class="fields">
-          <input type="hidden" name="DinosaurAssignmentID" id="updateDinosaurAssignmentID" value="1">
-          <label> ID: </label> 1
-          <label> Dinosaur Name </label> <input type="text" name="name">
-          <label> Employee Name </label> <input type="text" name="name">
-          <label> Assignment </label> <input type="text" name="name">
-                
-      </fieldset>
-          <input class="btn" type="submit" id="UpdateSaveDinosaurAssignment" value="Save Update DinosaurAssignment">
+      	  </fieldset>
+          <input class="btn btn-primary" type="submit" id="Add_Assignment" name="Add_Assignment" value="Add Assignment">
           <input class="btn" type="button" value="cancel" onClick="browseDinosaurAssignments()">
 	</form> 
-</div><!-- update -->
-<p>&nbsp;</p>
-<div id="delete" style="display: block">
-  <form method="POST" id="deleteDinosaurAssignments">
-      <legend><strong>Delete Dinosaur Assignment</strong></legend>
-          <fieldset class="fields">
-          <p>Are you sure you wish to delete the following?</p>
-          <input type="hidden" name="DinosaurAssignmentID" id="deleteDinosaurAssignmentID" value="1">
-          <label><strong>ID:</strong></label> 1
-            <label> <strong>Lee -> Lee Taylor</strong> </label> 
-            
-    </fieldset>
-    <input class="btn" type="submit" id="DeleteDinosaurAssignment" value="Delete DinosaurAssignment">
-          <input class="btn" type="button" value="cancel" onClick="browseDinosaurAssignment()">
-  </form> 
-</div><!-- delete -->
+</div><!-- insert -->
+	<div id="edit">
+		<!-- form to edit data in Dinosaurs-->
+		<form id="editVisitor" action="/edit_visitor/{{data[0].id}}" method="post">
+			<legend><strong>Edit Visitor</strong></legend>
+			<fieldset>
+				<input type="hidden" value="{{data[0].id}}" class="form-control" id="personID" name="personID" required>
+				<label for="make">first name:</label>
 
+				<input type="text" class="form-control" id="fname" name="fname" pattern="[A-Za-z]{1,}" placeholder="{{data[0].fname}}" required>
+				<label for="model">last name:</label>
+
+				<input type="text" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].lname}}" required>
+				<label for="year">homeworld:</label>
+
+				<select class="form-control" id="homeworld" name="homeworld" pattern="[0-4]{1}" placeholder="" required>
+					<option value="0">&nbsp;</option>
+					<option value="1">Gemenon</option>
+					<option value="2">Leonis</option>
+					<option value="3">Caprica</option>
+					<option value="{{data[0].homeworld}}" selected></option>
+				</select>
+
+				<label for="color">age:</label>
+				<input type="text" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].age}}" required> </fieldset>
+				<input class="btn" type="button" value="Cancel" onClick="browsePeople()" style="margin:.5rem;"> 
+        </form>
+	</div><!--edit-->
+    <div id="delete" style="display: block">
+        <form id="deleteVisitor" action="/delete_visitor/{{data[0].ID}}" method="POST">
+            <legend><strong>Delete Visitor</strong></legend>
+            <fieldset class="fields">
+                <p>Are you sure you wish to delete the following?</p>
+                <input type="hidden" name="locationID" id="deletelocationID" value="{{data[0].ID}}">
+                <label><strong>ID:</strong></label> 
+                <label> <strong>Name</strong> </label> Enclosure
+            </fieldset>
+            <input class="btn" type="submit" id="DeleteVisitor" value="Delete Visitor">
+            <input class="btn" type="button" value="cancel" onClick="browseVisitors()">
+        </form> 
+    </div><!-- delete -->
 </body>
 </html>

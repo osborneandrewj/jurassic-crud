@@ -274,7 +274,7 @@ def dinosaurAssignments():
     #insert a dino assignment into the table
     if request.method == 'POST':
         #if the user is adding an assignment
-        if request.form.get("addDinosaurAssignment"):
+        if request.form.get("Add_Assignment"):
             dinosaur = request.form["dinosaur"]
             employee = request.form["employee"]
             description = request.form["description"]
@@ -286,8 +286,8 @@ def dinosaurAssignments():
                         VALUES ((SELECT id FROM Employees WHERE f_name = %s AND l_name = %s), \
                         (SELECT id FROM Dinosaurs WHERE name = %s),  (%s));"
                 
-                cur = mysql.connection.cursor()
-                cur.execute(query1, (fname, lname, dinosaur, description))
+                data = mysql.connection.cursor()
+                data.execute(query1, (fname, lname, dinosaur, description))
                 mysql.connection.commit()
         #redirect back to dinosaur assignments
         return redirect('/dinosaurAssignments')
@@ -295,7 +295,7 @@ def dinosaurAssignments():
     # get dinosaur assignments data
     if request.method == "GET":
         #SQL to get all the dinosaur assignments
-        query2 = "SELECT  Employees_To_Dinosaurs.id AS id, \
+        query2 = "SELECT  Employees_To_Dinosaurs.id AS ID, \
             Dinosaurs.name AS 'Dinosaur', CONCAT(Employees.f_name, ' ', Employees.l_name) AS \
             'Employees Assigned', Employees_To_Dinosaurs.description AS 'Assignment' \
             FROM Employees_To_Dinosaurs INNER JOIN Dinosaurs ON Employees_To_Dinosaurs.d_id = \
@@ -303,7 +303,7 @@ def dinosaurAssignments():
         cur = mysql.connection.cursor()
         cur.execute(query2)
 
-        dinosaur_assignment_data = cur.fetchall()
+        data = cur.fetchall()
 
         #grab employee data for the drop down
         query3 = "SELECT CONCAT(f_name, ' ', l_name) AS employee FROM Employees"
@@ -318,14 +318,14 @@ def dinosaurAssignments():
         dinosaur_data = cur.fetchall()
 
         #render the dinosaurAssignments and pass the nescasary data
-        return render_template("dinosaurAssignments.j2", dinosaur_assignments=dinosaur_assignment_data,
+        return render_template("dinosaurAssignments.j2", data=data,
          employees=employee_data, dinosaurs=dinosaur_data )
 
 
-@app.route("/deleteAssignment/<int:id>", methods=["POST","GET"])
+@app.route("/delete_assignment/<int:id>", methods=["POST","GET"])
 def deleteAssignment(id):
     if request.method == "GET":
-        query1 = "SELECT  Employees_To_Dinosaurs.id AS id, \
+        query1 = "SELECT  Employees_To_Dinosaurs.id AS ID, \
         Dinosaurs.name AS 'Dinosaur', CONCAT(Employees.f_name, ' ', Employees.l_name) AS \
         'Employees Assigned', Employees_To_Dinosaurs.description AS 'Assignment' FROM Employees_To_Dinosaurs \
         INNER JOIN Dinosaurs ON Employees_To_Dinosaurs.d_id = Dinosaurs.id INNER JOIN Employees ON \
@@ -335,11 +335,11 @@ def deleteAssignment(id):
         cur.execute(query1, (id,))
         data = cur.fetchall()
 
-        return render_template("deleteAssignment.j2", data=data)
+        return render_template("delete_assignment.j2", data=data)
 
     if request.method == "POST":
 
-        query = "DELETE FROM Employees_To_Dinosaurs WHERE Employees_To_Dinosaurs.id = '%s';"
+        query = "DELETE FROM Employees_To_Dinosaurs WHERE Employees_To_Dinosaurs.id = %s;"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         mysql.connection.commit()
@@ -347,64 +347,59 @@ def deleteAssignment(id):
     # redirect back to dinosaur page
     return redirect("/dinosaurAssignments")
 
-@app.route('/updateAssignment/<int:id>', methods=["POST", "GET"])
+@app.route('/update_assignment/<int:id>', methods=["POST", "GET"])
 def updateAssignment(id):
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab a specific dinosaur that the user selected
-        query = "SELECT  Employees_To_Dinosaurs.id AS id, \
+        query = "SELECT  Employees_To_Dinosaurs.id AS ID, \
         Dinosaurs.name AS 'Dinosaur', CONCAT(Employees.f_name, ' ', Employees.l_name) AS \
-        'Employees Assigned', Employees_To_Dinosaurs.description AS 'Assignment' FROM Employees_To_Dinosaurs \
+        'Employee', Employees_To_Dinosaurs.description AS 'Assignment' FROM Employees_To_Dinosaurs \
         INNER JOIN Dinosaurs ON Employees_To_Dinosaurs.d_id = Dinosaurs.id INNER JOIN Employees ON \
         Employees_To_Dinosaurs.e_id =Employees.id WHERE Employees_To_Dinosaurs.id = %s;"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
 
-        # mySQL query to grab data for the location dropdown menu
-        location_query = "SELECT name from Dinosaurs AS Dinosaur;"
+        # mySQL query to grab data for the Dinosaur dropdown menu
+        dino_query = "SELECT name from Dinosaurs;"
         cur = mysql.connection.cursor()
-        cur.execute(location_query)
-        loc_data = cur.fetchall()
+        cur.execute(dino_query)
+        dino_data = cur.fetchall()
 
         # mySQL query to grab data for the species dropdown menu
-        species_query = "SELECT CONCAT(f_name, ' ', l_name) AS 'Employee' FROM Employees;"
+        emp_query = "SELECT CONCAT(f_name, ' ', l_name) AS 'Employee' FROM Employees;"
         cur = mysql.connection.cursor()
-        cur.execute(species_query)
-        spec_data = cur.fetchall()
+        cur.execute(emp_query)
+        emp_data = cur.fetchall()
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("updateAssignment.j2", 
-            data=data, locations=loc_data, 
-            spec_data=spec_data)
+        return render_template("update_assignment.j2", 
+            data=data, dinosaurs=dino_data, 
+            employees=emp_data)
 
     if request.method == "POST":
         # fire off if user presses the Add Person button
-        if request.form.get("updateAssignment"):
+        if request.form.get("Update_Assignment"):
             # grab user form inputs
-            species = request.form["species"]
-            location = request.form["location"]
-            name = request.form["name"]
-            status = request.form["status"]
+            dinosaur = request.form["dinosaur"]
+            employee = request.form["employee"]
+            description = request.form["description"]
+           
+            emp = employee.split()
+            fname = emp[0]
+            lname = emp[1]
 
-        # TODO: account for null species
-            if species == "":
-                query = ""
-                cur = mysql.connection.cursor()
-                cur.execute(query, (species, location, name, status))
-                mysql.connection.commit()
 
-        # no null inputs
-            else:
-                query = "UPDATE Dinosaurs\
-                    SET species_id = (SELECT id FROM Species WHERE species_name=%s),\
-                        location_id = (SELECT id FROM Locations WHERE location_name= %s),\
-                        name = %s,\
-                        health_status = %s\
+            query = "UPDATE Employees_To_Dinosaurs\
+                    SET e_id = (SELECT id FROM Employees WHERE Employees.f_name = %s AND\
+                        Employees.l_name = %s),\
+                        d_id = (SELECT id from Dinosaurs where Dinosaurs.name =%s),\
+                        description = %s\
                     WHERE id = %s;"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (species, location, name, status, id))
-                mysql.connection.commit()
+            cur = mysql.connection.cursor()
+            cur.execute(query, (fname, lname, dinosaur, description, id))
+            mysql.connection.commit()
 
         # redirect back to Dinosaurs page
         return redirect("/dinosaurAssignments")
@@ -416,8 +411,10 @@ def employees():
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the people in bsg_people
-        query = "SELECT Employees.id, Employees.f_name, Employees.l_name, Employees.job_title, \
-                Employees.salary, Employees.health_status, Locations.location_name AS location \
+        query = "SELECT Employees.id AS 'ID', Employees.f_name AS 'First Name', \
+                Employees.l_name AS 'Last Name', Employees.job_title AS 'Job Title', \
+                Employees.salary AS 'Salary', Employees.health_status AS 'Health Status', \
+                Locations.location_name AS Location \
                 FROM Employees \
                 INNER JOIN Locations ON Locations.id = Employees.location_id;"
         cur = mysql.connection.cursor()
@@ -739,8 +736,9 @@ def visitors():
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the people in bsg_people
-        query = "SELECT Visitors.id, Visitors.f_name, Visitors.l_name, Visitors.health_status, \
-                Locations.location_name AS location \
+        query = "SELECT Visitors.id AS 'ID', Visitors.f_name AS 'First Name', \
+                Visitors.l_name AS 'Last Name', Visitors.health_status AS 'Health Status', \
+                Locations.location_name AS 'Location' \
                 FROM Visitors \
                 INNER JOIN Locations ON Locations.id = Visitors.location_id;"
         cur = mysql.connection.cursor()
