@@ -417,7 +417,7 @@ def employees():
                 Employees.salary AS 'Salary', Employees.health_status AS 'Health Status', \
                 Locations.location_name AS Location \
                 FROM Employees \
-                INNER JOIN Locations ON Locations.id = Employees.location_id;"
+                LEFT OUTER JOIN Locations ON Locations.id = Employees.location_id;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -471,7 +471,7 @@ def delete_employee(id):
                 Employees.job_title AS 'job_title', Employees.salary AS 'salary', Locations.location_name \
                 AS 'Location', Employees.health_status AS 'Status'\
             FROM Employees\
-            INNER JOIN Locations ON Employees.location_id = Locations.id WHERE Employees.id = %s;"
+            LEFT OUTER JOIN Locations ON Employees.location_id = Locations.id WHERE Employees.id = %s;"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
@@ -497,7 +497,7 @@ def update_employee(id):
                 Employees.job_title AS 'job_title', Employees.salary AS 'salary', Locations.location_name \
                 AS 'Location', Employees.health_status AS 'Status'\
             FROM Employees\
-            INNER JOIN Locations ON Employees.location_id = Locations.id WHERE Employees.id = %s;"
+            LEFT OUTER JOIN Locations ON Employees.location_id = Locations.id WHERE Employees.id = %s;"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
@@ -741,7 +741,7 @@ def visitors():
                 Visitors.l_name AS 'Last Name', Visitors.health_status AS 'Health Status', \
                 Locations.location_name AS 'Location' \
                 FROM Visitors \
-                INNER JOIN Locations ON Locations.id = Visitors.location_id;"
+                LEFT OUTER JOIN Locations ON Locations.id = Visitors.location_id;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -819,7 +819,7 @@ def update_visitor(id):
         query =  query = "SELECT Visitors.id AS 'ID', Visitors.f_name AS 'f_name', Visitors.l_name AS \
             'l_name', Locations.location_name AS 'Location', Visitors.health_status AS 'Status'\
         FROM Visitors\
-            INNER JOIN Locations ON Visitors.location_id = Locations.id WHERE Visitors.id = %s;"
+            LEFT OUTER JOIN Locations ON Visitors.location_id = Locations.id WHERE Visitors.id = %s;"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
