@@ -23,7 +23,7 @@ app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 mysql = MySQL(app)
 
 # Data used to pre-populate dropdown menu options
-status_options = ["healthy", "sick", "injured", "deceased"]
+status_options = ["healthy", "sick", "injured", "deceased", "eaten"]
 diet_options = ["carnivore", "omnivore", "herbivore"]
 electric_status_options = ["online", "reserve", "offline"]
 security_status_options = ["online", "lockdown", "offline"]
