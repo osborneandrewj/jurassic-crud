@@ -60,7 +60,7 @@ def dinosaurs():
         spec_data = cur.fetchall()
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("dinosaurs.j2", data=data, locations=loc_data, 
+        return render_template("dinosaurs/dinosaurs.j2", data=data, locations=loc_data, 
         spec_data=spec_data)
 
     if request.method == "POST":
@@ -122,7 +122,7 @@ def update_dinosaur(id):
         cur.execute(species_query)
         spec_data = cur.fetchall()
 
-        return render_template("update_dinosaur.j2", 
+        return render_template("dinosaurs/update_dinosaur.j2", 
             data=data, locations=loc_data, 
             spec_data=spec_data, status_options=status_options)
 
@@ -172,7 +172,7 @@ def delete_dinosaur(id):
         cur.execute(query, (id,))
         data = cur.fetchall()
 
-        return render_template("delete_dinosaur.j2", data=data)
+        return render_template("dinosaurs/delete_dinosaur.j2", data=data)
 
 
     if request.method == "POST":
@@ -270,8 +270,8 @@ def delete_species(id):
     return redirect("/species")
 
 
-@app.route('/dinosaurAssignments', methods=["POST", "GET"])
-def dinosaurAssignments():
+@app.route('/dinosaur_assignments', methods=["POST", "GET"])
+def dinosaur_assignments():
     #insert a dino assignment into the table
     if request.method == 'POST':
         #if the user is adding an assignment
@@ -291,7 +291,7 @@ def dinosaurAssignments():
                 data.execute(query1, (fname, lname, dinosaur, description))
                 mysql.connection.commit()
         #redirect back to dinosaur assignments
-        return redirect('/dinosaurAssignments')
+        return redirect('/dinosaur_assignments')
 
     # get dinosaur assignments data
     if request.method == "GET":
@@ -319,7 +319,7 @@ def dinosaurAssignments():
         dinosaur_data = cur.fetchall()
 
         #render the dinosaurAssignments and pass the nescasary data
-        return render_template("dinosaurAssignments.j2", data=data,
+        return render_template("assignments/dinosaur_assignments.j2", data=data,
          employees=employee_data, dinosaurs=dinosaur_data )
 
 
@@ -336,7 +336,7 @@ def deleteAssignment(id):
         cur.execute(query1, (id,))
         data = cur.fetchall()
 
-        return render_template("delete_assignment.j2", data=data)
+        return render_template("assignments/delete_assignment.j2", data=data)
 
     if request.method == "POST":
 
@@ -346,7 +346,7 @@ def deleteAssignment(id):
         mysql.connection.commit()
 
     # redirect back to dinosaur page
-    return redirect("/dinosaurAssignments")
+    return redirect("/dinosaur_assignments")
 
 @app.route('/update_assignment/<int:id>', methods=["POST", "GET"])
 def updateAssignment(id):
@@ -375,7 +375,7 @@ def updateAssignment(id):
         emp_data = cur.fetchall()
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("update_assignment.j2", 
+        return render_template("assignments/update_assignment.j2", 
             data=data, dinosaurs=dino_data, 
             employees=emp_data)
 
@@ -403,7 +403,7 @@ def updateAssignment(id):
             mysql.connection.commit()
 
         # redirect back to Dinosaurs page
-        return redirect("/dinosaurAssignments")
+        return redirect("/dinosaur_assignments")
 
 
 
@@ -429,7 +429,7 @@ def employees():
         loc_data = cur.fetchall()
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("employees.j2", data=data, locations=loc_data)
+        return render_template("employees/employees.j2", data=data, locations=loc_data)
 
     if request.method == "POST":
         # fire off if user presses the Add Person button
@@ -476,7 +476,7 @@ def delete_employee(id):
         cur.execute(query, (id,))
         data = cur.fetchall()
 
-        return render_template("delete_employee.j2", data=data)
+        return render_template("employees/delete_employee.j2", data=data)
 
 
     if request.method == "POST":
@@ -511,7 +511,7 @@ def update_employee(id):
 
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("update_employee.j2", 
+        return render_template("employees/update_employee.j2", 
             data=data, locations=loc_data, 
             status_options=status_options)
 
@@ -756,7 +756,7 @@ def visitors():
         
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("visitors.j2", data=data, locations=loc_data)
+        return render_template("visitors/visitors.j2", data=data, locations=loc_data)
 
     if request.method == "POST":
         # fire off if user presses the Add Person button
@@ -799,7 +799,7 @@ def delete_visitor(id):
         cur.execute(query, (id,))
         data = cur.fetchall()
 
-        return render_template("delete_visitor.j2", data=data)
+        return render_template("visitors/delete_visitor.j2", data=data)
 
 
     if request.method == "POST":
@@ -833,7 +833,7 @@ def update_visitor(id):
 
 
         # render edit_people page passing our query data and homeworld data to the edit_people template
-        return render_template("update_visitor.j2", 
+        return render_template("visitors/update_visitor.j2", 
             data=data, locations=loc_data, 
             status_options=status_options)
 
