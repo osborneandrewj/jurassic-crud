@@ -1,13 +1,18 @@
 <html>
-<h1> Dinosaur Assignments </h1>
- [ <a href="/dinosaurs">Dinosaurs</a> | <a href="/species">Species</a> | <a href="/employees">Employees</a> | <a href="/visitors">Visitors</a> | <a href="/dinosaurAssignments">Dinosaur Assignments</a> | <a href="/locations">Locations</a> ]<head>
-	<title>Delete Dinosaur Assignment</title>
+<img class="myImage" src="\static\JurassicLogo.png"> <h1>Dinosaur Assignments </h1>
+<h2>   <a href="/dinosaurs" class="btn btn-default">Dinosaurs</a> <a href="/species" class="btn btn-default">Species</a> 
+     <a href="/employees" class="btn btn-default">Employees</a>  <a href="/visitors" class="btn btn-default">Visitors</a> 
+	 <a href="/dinosaurAssignments" class="btn btn-default">Dinosaur Assignments</a>  <a href="/locations"class="btn btn-default">Locations</a>  </h2>
+
+
+<head>
+	<link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/static/style.css">	<title>Delete Dinosaur Assignment</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <div>
-        <table border="1" cellpadding="5"> 
+        <table class="blueTable"> 
             <caption> <h3>Are you sure you want to delete this assignment?</h3> </caption>
             <!-- Access data tuple passed from app.py -->
             {% if data %}
@@ -40,7 +45,7 @@
     <div id="delete">
     <!-- buttons to delete an assignment-->
     <form id="deleteAssignment" action="/delete_assignment/{{data[0].ID}}" method="post">
-          <input class="btn btn-primary" type="submit" id="Delete_Assignment" name="Delete_Assignment" value="Delete_Assignment">
+          <input class="btn btn-primary" type="submit" id="Delete_Assignment" name="Delete_Assignment" value="Delete Assignment">
           <a href="/dinosaurAssignments" class="btn btn-default">Cancel</a>
 	</form> 
 </html>
