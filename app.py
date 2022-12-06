@@ -409,7 +409,7 @@ def updateAssignment(id):
 
 @app.route('/employees', methods=["GET", "POST"])
 def employees():
-    # Grab Dinosaurs data so we send it to our template to display
+    # Grab data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the people in bsg_people
         query = "SELECT Employees.id AS 'ID', Employees.f_name AS 'First Name', \
@@ -428,7 +428,6 @@ def employees():
         cur.execute(location_query)
         loc_data = cur.fetchall()
 
-        # render edit_people page passing our query data and homeworld data to the edit_people template
         return render_template("employees/employees.j2", data=data, locations=loc_data)
 
     if request.method == "POST":
