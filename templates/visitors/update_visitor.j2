@@ -48,9 +48,16 @@
             <label> Location </label> 
               <select name="location">
             	<option value="{{data[0].Location}}">{{data[0].Location}}</option>
-                {% for x in locations if x.location_name not in data[0].Location %}
-                    <option value="{{x.location_name}}">{{x.location_name}}</option>
-                {% endfor %}
+                {% if data[0].Location %}
+                  {% for x in locations if x.location_name not in data[0].Location %}
+                      <option value="{{x.location_name}}">{{x.location_name}}</option>
+                  {% endfor %}
+                      <option value="NULL">None</option>
+                {% else %}
+                  {% for x in locations %}
+                      <option value="{{x.location_name}}">{{x.location_name}}</option>
+                  {% endfor %}
+                {% endif %}
               </select>
 	          <label> Health Status </label> 
               <select name="status">

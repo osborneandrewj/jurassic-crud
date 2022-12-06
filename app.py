@@ -736,7 +736,7 @@ def update_location(id):
 def visitors():
     # Grab Dinosaurs data so we send it to our template to display
     if request.method == "GET":
-        # mySQL query to grab all the people in bsg_people
+        
         query = "SELECT Visitors.id AS 'ID', Visitors.f_name AS 'First Name', \
                 Visitors.l_name AS 'Last Name', Visitors.health_status AS 'Health Status', \
                 Locations.location_name AS 'Location' \
@@ -752,14 +752,10 @@ def visitors():
         cur.execute(location_query)
         loc_data = cur.fetchall()
 
-
-        
-
-        # render edit_people page passing our query data and homeworld data to the edit_people template
         return render_template("visitors/visitors.j2", data=data, locations=loc_data)
 
     if request.method == "POST":
-        # fire off if user presses the Add Person button
+        # fire off if user presses the Add Visitor button
         if request.form.get("Add_Visitor"):
             # grab user form inputs
             location = request.form["location"]
@@ -794,7 +790,7 @@ def delete_visitor(id):
         # mysql query to gather the form's data
         query = "SELECT Visitors.id AS 'ID', Visitors.f_name AS 'f_name', Visitors.l_name AS 'l_name', Locations.location_name AS 'Location', Visitors.health_status AS 'Status'\
         FROM Visitors\
-            INNER JOIN Locations ON Visitors.location_id = Locations.id WHERE Visitors.id = %s;"
+            LEFT OUTER JOIN Locations ON Visitors.location_id = Locations.id WHERE Visitors.id = %s;"
         cur = mysql.connection.cursor()
         cur.execute(query, (id,))
         data = cur.fetchall()
@@ -831,14 +827,11 @@ def update_visitor(id):
         cur.execute(location_query)
         loc_data = cur.fetchall()
 
-
-        # render edit_people page passing our query data and homeworld data to the edit_people template
         return render_template("visitors/update_visitor.j2", 
             data=data, locations=loc_data, 
             status_options=status_options)
 
     if request.method == "POST":
-        # fire off if user presses the Add Person button
         if request.form.get("Update_Visitor"):
             # grab user form inputs
             location = request.form["location"]
