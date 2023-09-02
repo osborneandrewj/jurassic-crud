@@ -25,3 +25,40 @@ To achieve these goals we've implemented a robust and reliable MySQL database-dr
 - **Structure Management:** Each of the structures within the park, including dinosaur enclosures and visitor centers, are carefully monitored for electrical grid status and security fence integrity.
 
 The Jurassic Park Security System represents a pioneering effort to marry cutting-edge technology with the wonder of genetic engineering. As we continue to explore the boundaries of what's possible, we remain committed to providing a safe, unforgettable, and awe-inspiring experience for our visitors while safeguarding the incredible living beings that call Isla Nublar home. Welcome to the future of entertainment and conservation.
+
+## Database Overview: Jurassic Park Management Database
+
+The Jurassic Park Management Database is a comprehensive database designed to ensure the safe and efficient operation of InGen's Isla Nublar Jurassic Park. It encompasses critical aspects of the park's functionality, including the monitoring and management of dinosaurs, species information, employee assignments, visitor records, and location-specific data.
+
+### Tables:
+
+**Dinosaurs:**
+- This table records essential details about each unique dinosaur, including genetic makeup, location, and health status.
+- Attributes include dinosaurID, speciesID, locationID, name, and health_status.
+- Relationships: Many-to-one with location, many-to-one with species, and many-to-many with employees.
+
+**Species:**
+- The Species table provides insights into the name and dietary characteristics of dinosaur species present in the park.
+- Attributes include speciesID, species_name, diet, and locationID.
+- Relationships: One-to-many with Dinosaurs and many-to-many with Locations, aiding staff in identifying species within specific park areas.
+
+**Employees:**
+- This table manages park employees, including their job titles, salaries, assigned dinosaurs, and dinosaur health status.
+- Attributes include employeeID, job_title, job_salary, locationID, dinosaurID, and health_status.
+- Relationships: Many-to-one with location and many-to-many with dinosaurs, representing employees' roles in handling and treating dinosaurs.
+
+**Visitors:**
+- The Visitors table maintains records of notable park visitors, capturing their names, locations within the park, and health statuses.
+- Attributes include visitorID, name, location, and health_status.
+- Relationships: Many-to-one with location, providing insight into visitors' well-being during their stay.
+
+**Locations:**
+- This table represents specific zones within the park, tracking all aspects of these areas, including employees, guests, animals, and security features.
+- Attributes include locationID, location_name, electric_grid_status, and speciesID.
+- Relationships: Many-to-one with employees, visitors, and dinosaurs, as well as many-to-many with species, aiding in comprehensive zone management.
+
+### CRUD Interface: 
+
+A basic CRUD interface was implemented utilizing Jinja to enable the embedding of Python code in a simple HTML frontend. The result enables security personnel to intuitively engage in basic create, read, update, and delete database operations.
+
+![Image 12-5-22 at 9 57 PM](https://github.com/osborneandrewj/jurassic-crud/assets/7835650/b340129b-ef23-44cc-9f41-b7e016c74251)
